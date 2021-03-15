@@ -7,9 +7,10 @@
     <groupId>cn.blockchain</groupId>
     <artifactId>blockChainWalletServer</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>${blockchain.version}</version>
     <modules>
         <module>blockchain-common</module>
+        <module>omni-usdt</module>
 
     </modules>
     <parent>
@@ -19,12 +20,25 @@
         <relativePath/>
     </parent>
     <properties>
+        <blockchain.version>1.0.0</blockchain.version>
 
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
+            <!-- blockchain-common版本-->
+            <dependency>
+                <groupId>cn.blockchain</groupId>
+                <artifactId>blockchain-common</artifactId>
+                <version>${blockchain.version}</version>
+            </dependency>
+            <!-- omni-usdt 版本-->
+            <dependency>
+                <groupId>cn.blockchain</groupId>
+                <artifactId>omni-usdt</artifactId>
+                <version>${blockchain.version}</version>
+            </dependency>
 
 
         </dependencies>

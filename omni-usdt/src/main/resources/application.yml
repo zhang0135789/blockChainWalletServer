@@ -1,0 +1,46 @@
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 10091
+  servlet:
+    # 应用的访问路径
+    context-path: /omni-usdt
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # tomcat最大线程数，默认为200
+    max-threads: 800
+    # Tomcat启动初始化的线程数，默认值25
+    min-spare-threads: 30
+
+# Spring配置
+spring:
+  application:
+    name: service-rpc-usdt
+  data:
+    mongodb:
+      uri: mongodb://8.129.44.191:27017/db_wallet
+
+coin:
+  #节点地址
+  rpc: http://localhost:8000/
+  #token名称
+  name: USDT
+  #单位
+  uint: USDT
+  #节点密码
+  password: 123456
+  #
+  step: 10
+  #初始化扫描块高
+  init-block-height: 50000
+  #归集地址
+  withdraw-address:
+  #默认矿工费
+  default-miner-fee: 0.0001
+  # 最小归集金额
+  min-collect-amount: 1
+
+
+
+
