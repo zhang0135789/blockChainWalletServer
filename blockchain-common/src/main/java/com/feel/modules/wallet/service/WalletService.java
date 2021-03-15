@@ -15,6 +15,10 @@ public interface WalletService {
      */
     String createNewAddress(String accountName);
 
-
+    /**
+     * 区块高度
+     * @return
+     */
+    Integer height();
 
 }
