@@ -21,6 +21,12 @@ spring:
     mongodb:
       uri: mongodb://8.129.44.191:27017/db_wallet
 
+# 日志配置
+logging:
+  level:
+    com.feel: debug
+    org.springframework: warn
+
 coin:
   #节点地址
   rpc: http://localhost:8000/
