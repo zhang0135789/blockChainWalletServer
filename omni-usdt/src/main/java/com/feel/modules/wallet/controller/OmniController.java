@@ -2,6 +2,7 @@ package com.feel.modules.wallet.controller;
 
 import com.feel.modules.wallet.service.OmniService;
 import com.feel.modules.wallet.utils.R;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
  */
 @RestController
 @RequestMapping("/rpc")
+@Api(tags = "币种信息 : omni-usdt" ,value = "omni-usdt")
 public class OmniController extends WalletController<OmniService>{
 
 

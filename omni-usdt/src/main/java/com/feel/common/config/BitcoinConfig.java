@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.net.MalformedURLException;
 
 /**
  * @Author: zz
@@ -26,16 +25,17 @@ public class BitcoinConfig {
      */
     @Bean
     public BitcoinRpcClient setClient(@Value("${coin.rpc}") String uri){
+        BitcoinRpcClient client = null;
         try {
             log.info("uri={}",uri);
-            BitcoinRpcClient client =  new BitcoinRpcClient(uri);
+            client =  new BitcoinRpcClient(uri);
             log.info("=============================");
-            log.info("client={}",client);
+            log.info("client block={}",client.getBlockCount());
             log.info("=============================");
             return client;
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             log.error("init wallet failed" ,e);
-            return null;
+            return client;
         }
     }
 }

@@ -20,6 +20,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://8.129.44.191:27017/db_wallet
+      #more ip cluster
+      #uri=mongodb://user:pwd@ip1:port1,ip2:port2/database
 
 # 日志配置
 logging:
