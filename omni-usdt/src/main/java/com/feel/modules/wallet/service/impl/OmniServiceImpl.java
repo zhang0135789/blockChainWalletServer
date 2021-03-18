@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 /**
  * @Author: zz
  * @Description:
@@ -47,6 +49,30 @@ public class OmniServiceImpl implements OmniService  {
         Integer height = count - 1;
         log.info("block height [{}]" , height);
         return height;
+    }
+
+    /**
+     * 获取Omni地址总资产
+     * @param address
+     * @return
+     */
+    @Override
+    public BigDecimal getBalance(String address) {
+        BigDecimal balance = bitcoinClient.getOmniBalance(address);
+        return balance;
+    }
+
+    /**
+     * 交易
+     * @param from
+     * @param to
+     * @param amount
+     * @param fee
+     * @return
+     */
+    @Override
+    public String transfer(String from, String to, BigDecimal amount, BigDecimal fee) {
+        return null;
     }
 
 

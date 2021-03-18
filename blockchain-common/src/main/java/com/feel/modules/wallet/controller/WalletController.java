@@ -4,6 +4,8 @@ import com.feel.modules.wallet.service.WalletService;
 import com.feel.modules.wallet.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
+
 /**
  * @Author: zz
  * @Description: 钱包外部访问接口
@@ -39,4 +41,28 @@ public abstract class WalletController<S extends WalletService> {
      * @return
      */
     abstract R getBlockHeight();
+
+    /**
+     * 获取节点总资产
+     * @return
+     */
+    abstract R balances();
+
+    /**
+     * 获取地址总资产
+     * @param address
+     * @return
+     */
+    abstract R balance(String address);
+
+    /**
+     * 转账
+     * @param from
+     * @param to
+     * @param amount
+     * @param fee
+     * @return
+     */
+    abstract R transfer(String from , String to , BigDecimal amount , BigDecimal fee);
+
 }

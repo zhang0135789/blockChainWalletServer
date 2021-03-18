@@ -1,5 +1,7 @@
 package com.feel.modules.wallet.service;
 
+import java.math.BigDecimal;
+
 /**
  * @Author: zz
  * @Description: 钱包对接接口
@@ -21,4 +23,20 @@ public interface WalletService {
      */
     Integer height();
 
+    /**
+     * 获取地址总资产
+     * @param address
+     * @return
+     */
+    BigDecimal getBalance(String address);
+
+    /**
+     * 交易
+     * @param from
+     * @param to
+     * @param amount
+     * @param fee
+     * @return
+     */
+    String transfer(String from, String to, BigDecimal amount, BigDecimal fee);
 }
