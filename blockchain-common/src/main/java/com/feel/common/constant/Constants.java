@@ -35,7 +35,8 @@ public class Constants
     /**
      * omni-usdt 获取代币余额
      */
-    public static String METHOD_getOmniBalance = "omni_getbalance";
+    public static String METHOD_OmniBalance = "omni_getbalance";
 
 
+    public static String METHDO_OmniSend    = "omni_send";
 }

@@ -59,6 +59,7 @@ public class OmniServiceImpl implements OmniService  {
     @Override
     public BigDecimal getBalance(String address) {
         BigDecimal balance = bitcoinClient.getOmniBalance(address);
+        log.info("omni balance : address[{}],balance[{}]" , address , balance);
         return balance;
     }
 
@@ -72,7 +73,9 @@ public class OmniServiceImpl implements OmniService  {
      */
     @Override
     public String transfer(String from, String to, BigDecimal amount, BigDecimal fee) {
-        return null;
+        String txid = bitcoinClient.omniSend(from , to , amount);
+        log.info("omni transfer : txid[{}]" , txid);
+        return txid;
     }
 
 

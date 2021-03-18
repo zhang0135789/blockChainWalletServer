@@ -39,8 +39,9 @@ public class BitcoinRpcClient extends BitcoinJSONRPCClient {
         String balance = "0";
         Integer propertyid = Integer.valueOf(Constants.PROPERTYID_USDT);
         try {
+            log.info("omni balance : address[{}]" , address);
             Map<String, Object> map = (Map<String, Object>) query(
-                        Constants.METHOD_getOmniBalance,
+                        Constants.METHOD_OmniBalance,
                         new Object[] { address, propertyid }
                     );
             if (CollectionUtil.isNotEmpty(map)) {
@@ -51,4 +52,33 @@ public class BitcoinRpcClient extends BitcoinJSONRPCClient {
         }
         return new BigDecimal(balance);
     }
+
+    /**
+     * omni-usdt 交易
+     * @param from
+     * @param to
+     * @param amount
+     * @return
+     */
+    public String omniSend(String from, String to, BigDecimal amount) {
+        try{
+            log.info("omni send : from[{}] ,to[{}],amount[{}]",from,to,amount);
+            String txid =  query(
+                    Constants.METHDO_OmniSend,
+                    new Object[]{
+                            from,
+                            to,
+                            Integer.valueOf(Constants.PROPERTYID_USDT),
+                            amount.toPlainString()
+                    }
+            ).toString();
+            return txid;
+        } catch (Exception e){
+            log.error("omni send error  ");
+            return null;
+        }
+    }
+
+
+
 }

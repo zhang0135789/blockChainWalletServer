@@ -57,6 +57,8 @@ public class OmniController extends WalletController<OmniService>{
     @ApiOperation("交易")
     R transfer(String from, String to, BigDecimal amount, BigDecimal fee) {
         String txid = walletService.transfer(from,to,amount,fee);
-        return null;
+        return R.ok(txid);
     }
+
+
 }
