@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -19,7 +20,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel("地址集合")
-public class Account {
+public class Account implements Serializable {
+    private static final long serialVersionUID = 1L;
+
 
     @ApiModelProperty(name = "account" , value = "账户号")
     private String account;

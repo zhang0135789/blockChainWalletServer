@@ -3,7 +3,6 @@ package com.feel.modules.wallet.service.impl;
 import com.feel.modules.wallet.entity.Account;
 import com.feel.modules.wallet.entity.Coin;
 import com.feel.modules.wallet.service.AccountService;
-import com.mongodb.WriteResult;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import java.util.List;
 
 /**
  * @Author: zz
- * @Description:
+ * @Description: 账户管理
  * @Date: 2:42 PM 3/18/21
  * @Modified By
  */

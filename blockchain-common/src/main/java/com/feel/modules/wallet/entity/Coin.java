@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -14,7 +15,9 @@ import java.math.BigInteger;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("币种信息")
-public class Coin {
+public class Coin implements Serializable {
+    private static final long serialVersionUID = 1L;
+
 
     @ApiModelProperty(name = "name" , value = "币种名称")
     private String name;
