@@ -51,10 +51,10 @@ public abstract class ScanDataJob implements Runnable {
         if(currentBlockHeight < networkBlockNumber) {
             long startBlockNumber = currentBlockHeight + 1;
             currentBlockHeight = (networkBlockNumber - currentBlockHeight > step) ? currentBlockHeight + step : networkBlockNumber;
-            log.info("start scan block from[{}] to[{}]",startBlockNumber, currentBlockHeight);
-            List<Recharge> transactionlist = scanBlock(startBlockNumber, currentBlockHeight);
-            if(ObjectUtil.isNotEmpty(transactionlist)) {
-                transactionlist.stream().forEach(recharge ->{
+            log.info("start scan block fromBlock[{}] toBlock[{}]",startBlockNumber, currentBlockHeight);
+            List<Recharge> rechargelist = scanBlock(startBlockNumber, currentBlockHeight);
+            if(ObjectUtil.isNotEmpty(rechargelist)) {
+                rechargelist.stream().forEach(recharge ->{
                     rechargeEvent.onConfirmed(recharge);
                 });
                 //记录日志

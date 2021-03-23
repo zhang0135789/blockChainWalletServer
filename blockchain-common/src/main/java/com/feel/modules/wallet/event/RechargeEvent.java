@@ -28,7 +28,7 @@ public class RechargeEvent {
         if(ObjectUtil.isNotEmpty(recharge)) {
             log.info("confirmed transaction txid[{}] from[{}] to[{}] amount[{}]",
                     recharge.getTxid(),recharge.getFromAddress(),recharge.getToAddress(),recharge.getAmount());
-            boolean result = rechargeService.save(recharge);
+            Recharge result = rechargeService.save(recharge);
 
         }
 

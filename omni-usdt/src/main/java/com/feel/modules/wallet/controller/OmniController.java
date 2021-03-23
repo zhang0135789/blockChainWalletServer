@@ -43,6 +43,7 @@ public class OmniController extends WalletController<OmniService>{
     @GetMapping("/balances")
     @ApiOperation("获取节点总资产")
     public R balances() {
+        //TODO
         return null;
     }
 
