@@ -30,6 +30,8 @@ public class RechargeEvent {
                     recharge.getTxid(),recharge.getFromAddress(),recharge.getToAddress(),recharge.getAmount());
             Recharge result = rechargeService.save(recharge);
 
+            //TODO 通知业务系统充值记录
+
         }
 
     }

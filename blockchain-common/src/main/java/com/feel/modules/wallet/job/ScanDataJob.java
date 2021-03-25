@@ -41,7 +41,7 @@ public abstract class ScanDataJob implements Runnable {
     @ApiModelProperty(name = "coin" , value = "币种信息")
     private Coin coin;
 
-    @ApiModelProperty(name = "scanLogService" , value = "扫描日志几率")
+    @ApiModelProperty(name = "scanLogService" , value = "扫描日志记录")
     private ScanLogService scanLogService;
 
 

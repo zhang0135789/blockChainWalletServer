@@ -56,6 +56,10 @@ coin:
   # 最小归集金额
   min-collect-amount: 1
 
-
+rule:
+  initBlockHeight: "latest"
+  interval: 5000L
+  step: 5
+  confirmation: 3
 
 
