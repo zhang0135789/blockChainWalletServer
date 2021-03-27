@@ -27,14 +27,13 @@ public class BitcoinConfig {
     public BitcoinRpcClient setClient(@Value("${coin.rpc}") String uri){
         BitcoinRpcClient client = null;
         try {
-            log.info("uri={}",uri);
+            log.info("======Start connect Omnicore Node url={} ======",uri);
             client =  new BitcoinRpcClient(uri);
-            log.info("=============================");
             log.info("client block={}",client.getBlockCount());
-            log.info("=============================");
+            log.info("======Connect Node Success ======");
             return client;
         } catch (Exception e) {
-            log.error("init wallet failed" ,e);
+            log.error("======Connect Node failed",e);
             return client;
         }
     }

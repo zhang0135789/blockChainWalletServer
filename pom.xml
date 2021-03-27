@@ -12,7 +12,8 @@
     <modules>
         <module>blockchain-common</module>
         <module>omni-usdt</module>
-
+        <module>trc20-usdt</module>
+        <module>erc20-usdt</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

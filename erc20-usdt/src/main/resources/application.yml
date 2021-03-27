@@ -1,10 +1,10 @@
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080
-  port: 10091
+  port: 10093
   servlet:
     # 应用的访问路径
-    context-path: /omni-usdt
+    context-path: /erc20-usdt
   tomcat:
     # tomcat的URI编码
     uri-encoding: UTF-8
@@ -16,7 +16,7 @@ server:
 # Spring配置
 spring:
   application:
-    name: service-rpc-usdt
+    name: service-rpc-erc20-usdt
   data:
     mongodb:
       uri: mongodb://8.129.44.191:27017/db_wallet
