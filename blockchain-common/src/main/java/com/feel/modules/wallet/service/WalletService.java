@@ -1,5 +1,6 @@
 package com.feel.modules.wallet.service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 /**
@@ -15,20 +16,20 @@ public interface WalletService {
      * @param accountName
      * @return
      */
-    String createNewAddress(String accountName);
+    String createNewAddress(String accountName) throws Exception;
 
     /**
      * 区块高度
      * @return
      */
-    Integer height();
+    Long height() throws Exception;
 
     /**
      * 获取地址总资产
      * @param address
      * @return
      */
-    BigDecimal getBalance(String address);
+    BigDecimal getBalance(String address) throws Exception;
 
     /**
      * 交易
@@ -38,5 +39,5 @@ public interface WalletService {
      * @param fee
      * @return
      */
-    String transfer(String from, String to, BigDecimal amount, BigDecimal fee);
+    String transfer(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception;
 }

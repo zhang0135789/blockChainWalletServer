@@ -25,10 +25,10 @@ public class Coin implements Serializable {
     @ApiModelProperty(name = "unit" , value = "代币名字(简称)")
     private String unit;
 
-    @ApiModelProperty(name = "rpc" , value = "")
+    @ApiModelProperty(name = "rpc" , value = "rpc节点url")
     private String rpc;
 
-    @ApiModelProperty(name = "keystorePath" , value = "")
+    @ApiModelProperty(name = "keystorePath" , value = "keystore存放位置")
     private String keystorePath;
 
     @ApiModelProperty(name = "defaultMinerFee" , value = "")
