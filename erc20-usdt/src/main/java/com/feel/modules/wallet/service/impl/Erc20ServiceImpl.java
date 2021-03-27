@@ -31,7 +31,7 @@ public class Erc20ServiceImpl implements Erc20Service {
      */
     @Override
     public String createNewAddress(String accountName) {
-        String newAddress = "bitcoinClient.getNewAddress(accountName)";
+        String newAddress = bitcoinClient.getNewAddress(accountName);
         log.info("new address [{}]" , newAddress);
         return newAddress;
     }
@@ -42,7 +42,7 @@ public class Erc20ServiceImpl implements Erc20Service {
      */
     @Override
     public Integer height() {
-        Integer count = 0;
+        Integer count = bitcoinClient.getBlockCount();
         Integer height = count - 1;
         log.info("block height [{}]" , height);
         return height;
@@ -55,7 +55,7 @@ public class Erc20ServiceImpl implements Erc20Service {
      */
     @Override
     public BigDecimal getBalance(String address) {
-        BigDecimal balance =BigDecimal.ONE;
+        BigDecimal balance = bitcoinClient.getOmniBalance(address);
         log.info("omni balance : address[{}],balance[{}]" , address , balance);
         return balance;
     }
@@ -70,7 +70,7 @@ public class Erc20ServiceImpl implements Erc20Service {
      */
     @Override
     public String transfer(String from, String to, BigDecimal amount, BigDecimal fee) {
-        String txid = "bitcoinClient.omniSend(from , to , amount)";
+        String txid = bitcoinClient.omniSend(from , to , amount);
         log.info("omni transfer : txid[{}]" , txid);
         return txid;
     }

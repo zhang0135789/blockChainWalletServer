@@ -5,7 +5,6 @@ import com.feel.modules.wallet.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * @Author: zz
@@ -35,7 +34,7 @@ public abstract class WalletController<S extends WalletService> {
      * @param accountName
      * @return
      */
-    abstract R getNewAddress(String accountName) throws NoSuchAlgorithmException;
+    abstract R getNewAddress(String accountName);
 
     /**
      * 获取网络区块高度

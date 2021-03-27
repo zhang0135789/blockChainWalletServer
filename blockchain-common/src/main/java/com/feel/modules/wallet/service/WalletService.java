@@ -1,8 +1,6 @@
 package com.feel.modules.wallet.service;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * @Author: zz
@@ -17,7 +15,7 @@ public interface WalletService {
      * @param accountName
      * @return
      */
-    String createNewAddress(String accountName) throws NoSuchAlgorithmException;
+    String createNewAddress(String accountName);
 
     /**
      * 区块高度
@@ -30,7 +28,7 @@ public interface WalletService {
      * @param address
      * @return
      */
-    BigDecimal getBalance(String address) throws IOException;
+    BigDecimal getBalance(String address);
 
     /**
      * 交易
@@ -40,5 +38,5 @@ public interface WalletService {
      * @param fee
      * @return
      */
-    String transfer(String from, String to, BigDecimal amount, BigDecimal fee) throws Throwable;
+    String transfer(String from, String to, BigDecimal amount, BigDecimal fee);
 }

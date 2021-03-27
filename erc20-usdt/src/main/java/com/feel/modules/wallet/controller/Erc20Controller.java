@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * @Author: zz
@@ -26,7 +25,7 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     @Override
     @GetMapping("/getNewAddress")
     @ApiOperation("获取新地址")
-    public R<String> getNewAddress(String accountName) throws NoSuchAlgorithmException {
+    public R<String> getNewAddress(String accountName) {
         String newAddress = walletService.createNewAddress(accountName);
         return R.ok(newAddress);
     }
