@@ -1,0 +1,65 @@
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 10093
+  servlet:
+    # 应用的访问路径
+    context-path: /erc20-usdt
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # tomcat最大线程数，默认为200
+    max-threads: 800
+    # Tomcat启动初始化的线程数，默认值25
+    min-spare-threads: 30
+
+# Spring配置
+spring:
+  application:
+    name: service-rpc-erc20-usdt
+  data:
+    mongodb:
+      uri: mongodb://8.129.44.191:27017/db_wallet
+      #more ip cluster
+      #uri=mongodb://user:pwd@ip1:port1,ip2:port2/database
+
+# 日志配置
+logging:
+  level:
+    com.feel: debug
+    org.springframework: warn
+
+# Swagger配置
+swagger:
+  # 是否开启swagger
+  enabled: true
+  # 请求前缀
+  pathMapping: /
+
+coin:
+  #节点地址
+  rpc: http://localhost:8000/
+  #token名称
+  name: USDT
+  #单位
+  uint: USDT
+  #节点密码
+  password: 123456
+  #
+  step: 10
+  #初始化扫描块高
+  init-block-height: 50000
+  #归集地址
+  withdraw-address:
+  #默认矿工费
+  default-miner-fee: 0.0001
+  # 最小归集金额
+  min-collect-amount: 1
+
+rule:
+  initBlockHeight: "latest"
+  interval: 5000
+  step: 5
+  confirmation: 3
+
+
