@@ -71,6 +71,8 @@ public interface AccountService {
      */
     List<Account> findAll();
 
+    Account save(Account account);
+
     /**
      * 查询所有账户数量
      * @return

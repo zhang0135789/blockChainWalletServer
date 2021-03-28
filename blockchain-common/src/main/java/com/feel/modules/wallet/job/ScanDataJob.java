@@ -61,7 +61,7 @@ public abstract class ScanDataJob implements Runnable {
                 scanLogService.update(coin.getName(), currentBlockHeight);
             }else {
                 log.info("scan error~!");
-                currentBlockHeight = startBlockNumber - 1;
+                currentBlockHeight = currentBlockHeight - 1;
             }
 
         } else {

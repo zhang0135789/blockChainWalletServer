@@ -15,6 +15,9 @@ server:
 
 # Spring配置
 spring:
+  cloud:
+    consul:
+      enabled: false
   application:
     name: service-rpc-trc20-usdt
   data:
@@ -37,18 +40,19 @@ swagger:
   pathMapping: /
 
 coin:
+  enabled: true
   #节点地址
   rpc: http://localhost:8000/
   #token名称
-  name: USDT
+  name: TRCUSDT
   #单位
-  uint: USDT
+  unit: TRC20_USDT
   #节点密码
   password: 123456
   #
-  step: 10
+  step: 1
   #初始化扫描块高
-  init-block-height: 50000
+  init-block-height: 28836775
   #归集地址
   withdraw-address:
   #默认矿工费
@@ -57,7 +61,7 @@ coin:
   min-collect-amount: 1
 
 rule:
-  initBlockHeight: "latest"
+  initBlockHeight: 28715136
   interval: 5000
   step: 5
   confirmation: 3

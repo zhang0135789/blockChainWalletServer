@@ -1,7 +1,12 @@
 package com.feel.modules.wallet.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.feel.modules.wallet.entity.Recharge;
+
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.List;
 
 /**
  * @Author: zz
@@ -13,11 +18,13 @@ public interface Trc20Service extends WalletService{
 
     public String createNewAddress(String accountName);
 
+    public  String createAccount(String address);
+
     /**
      * 区块高度
      * @return
      */
-    public Integer height() ;
+    public Long height() ;
 
     /**
      * 获取地址总资产
@@ -26,15 +33,8 @@ public interface Trc20Service extends WalletService{
      */
     public BigDecimal getTrcBalance(String address) throws IOException;
 
-    /**
-     * 交易
-     * @param from
-     * @param to
-     * @param amount
-     * @param fee
-     * @return
-     */
-    public String transferTrc(String from, String to, BigDecimal amount, BigDecimal fee) throws Throwable;
+
+    public String trc20Transaction(String symbol, String toAddress, BigDecimal amount);
 
 
     public BigDecimal getBalance(String address) throws IOException;
@@ -47,5 +47,9 @@ public interface Trc20Service extends WalletService{
      * @param fee
      * @return
      */
-    public String transfer(String from, String to, BigDecimal amount, BigDecimal fee) throws Throwable;
+    public String transfer(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception;
+
+    public  String getTransactionInfoByBlockNum(BigInteger num);
+    public  String getTransactionById(String txId);
+    public Recharge triggerSmartContract(List<String> addressList, String txId, JSONObject parseObject);
 }

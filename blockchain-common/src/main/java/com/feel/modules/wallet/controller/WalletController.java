@@ -4,7 +4,9 @@ import com.feel.modules.wallet.service.WalletService;
 import com.feel.modules.wallet.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @Author: zz
@@ -34,7 +36,7 @@ public abstract class WalletController<S extends WalletService> {
      * @param accountName
      * @return
      */
-    abstract R getNewAddress(String accountName);
+    abstract R getNewAddress(String accountName) throws NoSuchAlgorithmException;
 
     /**
      * 获取网络区块高度
@@ -53,7 +55,7 @@ public abstract class WalletController<S extends WalletService> {
      * @param address
      * @return
      */
-    abstract R balance(String address);
+    abstract R balance(String address) throws IOException;
 
     /**
      * 转账
@@ -63,6 +65,6 @@ public abstract class WalletController<S extends WalletService> {
      * @param fee
      * @return
      */
-    abstract R transfer(String from , String to , BigDecimal amount , BigDecimal fee);
+    abstract R transfer(String from , String to , BigDecimal amount , BigDecimal fee) throws Throwable;
 
 }
