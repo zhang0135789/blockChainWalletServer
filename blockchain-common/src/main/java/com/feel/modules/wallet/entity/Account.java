@@ -3,6 +3,7 @@ package com.feel.modules.wallet.entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @ApiModel("地址集合")
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;

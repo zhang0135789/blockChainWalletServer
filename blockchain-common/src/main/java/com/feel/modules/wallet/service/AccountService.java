@@ -73,6 +73,8 @@ public interface AccountService {
      */
     List<Account> findAll();
 
+    Account save(Account account);
+
     /**
      * * 查找所有需要归集账户
      * @param pageNo

@@ -18,12 +18,16 @@
     </properties>
 
     <dependencies>
-        <!--引入比特币相关依赖-->
         <dependency>
-            <groupId>com.savl.bitcoin</groupId>
-            <artifactId>bitcoin-rpc-client</artifactId>
-            <version>1.2.5</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
+        <!--引入比特币相关依赖-->
+<!--        <dependency>-->
+<!--            <groupId>com.savl.bitcoin</groupId>-->
+<!--            <artifactId>bitcoin-rpc-client</artifactId>-->
+<!--            <version>1.2.5</version>-->
+<!--        </dependency>-->
 
         <!--引入springWeb-->
         <dependency>
@@ -44,43 +48,62 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>${protobuf.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java-util</artifactId>
-            <version>${protobuf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.madgag.spongycastle</groupId>
-            <artifactId>core</artifactId>
-            <version>1.58.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.madgag.spongycastle</groupId>
-            <artifactId>prov</artifactId>
-            <version>1.58.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.web3j</groupId>
-            <artifactId>core</artifactId>
-            <version>3.4.0</version>
-        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.google.protobuf</groupId>-->
+<!--            <artifactId>protobuf-java</artifactId>-->
+<!--            <version>${protobuf.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.google.protobuf</groupId>-->
+<!--            <artifactId>protobuf-java-util</artifactId>-->
+<!--            <version>${protobuf.version}</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.madgag.spongycastle</groupId>-->
+<!--            <artifactId>core</artifactId>-->
+<!--            <version>1.58.0.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.madgag.spongycastle</groupId>-->
+<!--            <artifactId>prov</artifactId>-->
+<!--            <version>1.58.0.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.web3j</groupId>-->
+<!--            <artifactId>core</artifactId>-->
+<!--            <version>3.4.0</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>jnr-ffi</artifactId>-->
+<!--                    <groupId>com.github.jnr</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.tron</groupId>-->
+<!--            <artifactId>tron-core</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${project.basedir}/lib/tron-core-1.0-SNAPSHOT.jar</systemPath>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.tron</groupId>-->
+<!--            <artifactId>tron-protobuf</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${project.basedir}/lib/tron-protobuf-1.0-SNAPSHOT.jar</systemPath>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.tron</groupId>
-            <artifactId>tron-core</artifactId>
+            <artifactId>tron-wallet</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/tron-core-1.0-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.tron</groupId>
-            <artifactId>tron-protobuf</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/tron-protobuf-1.0-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}/lib/wallet-cli.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -88,6 +111,19 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.google.guava</groupId>-->
+<!--            <artifactId>guava</artifactId>-->
+<!--            <version>20.0</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.apache.httpcomponents</groupId>-->
+<!--            <artifactId>httpclient</artifactId>-->
+<!--            <version>4.5.13</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 
