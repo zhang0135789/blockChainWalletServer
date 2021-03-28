@@ -3,15 +3,18 @@ package com.feel.modules.wallet.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.feel.modules.wallet.entity.Account;
 import com.feel.modules.wallet.entity.Coin;
+import com.feel.modules.wallet.entity.CollectionTran;
 import com.feel.modules.wallet.entity.Contract;
 import com.feel.modules.wallet.service.AccountCollectionService;
 import com.feel.modules.wallet.service.AccountService;
+import com.feel.modules.wallet.service.CollectionService;
 import com.feel.modules.wallet.service.Erc20Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @Author: zz
@@ -31,6 +34,8 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
     private Coin coin;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private CollectionService collectionService;
 
 
     @Override
@@ -66,8 +71,16 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
             BigDecimal minerFee = erc20Service.getMinerFee(contract.getGasLimit());
             BigDecimal tokenBalance = erc20Service.getBalance(account.getAddress());
             String hash = erc20Service.transfer(account.getAddress(), coin.getMasterAddress(), tokenBalance, minerFee);
-            log.info("collection success : from[{}],to[{}],amount[{}],hash[{}]",account.getAccount(),coin.getMasterAddress(),tokenBalance,minerFee);
+            log.info("collection success : from[{}],to[{}],amount[{}],hash[{}]",account.getAddress(),coin.getMasterAddress(),tokenBalance,minerFee);
             //TODO 归集记录
+            CollectionTran collectionTran = new CollectionTran();
+            collectionTran.setFromAddress(account.getAddress());
+            collectionTran.setToAddress(coin.getMasterAddress());
+            collectionTran.setAmount(tokenBalance);
+            collectionTran.setTxid(hash);
+            collectionTran.setTime(new Date());
+            collectionService.save(collectionTran);
+
 
         } catch (Exception e) {
             log.error("collection error :" ,e);
