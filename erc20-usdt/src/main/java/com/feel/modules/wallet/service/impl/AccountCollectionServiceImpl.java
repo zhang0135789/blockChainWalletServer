@@ -67,7 +67,7 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
             BigDecimal tokenBalance = erc20Service.getBalance(account.getAddress());
             String hash = erc20Service.transfer(account.getAddress(), coin.getMasterAddress(), tokenBalance, minerFee);
             log.info("collection success : from[{}],to[{}],amount[{}],hash[{}]",account.getAccount(),coin.getMasterAddress(),tokenBalance,minerFee);
-            //TODO归集记录
+            //TODO 归集记录
 
         } catch (Exception e) {
             log.error("collection error :" ,e);
