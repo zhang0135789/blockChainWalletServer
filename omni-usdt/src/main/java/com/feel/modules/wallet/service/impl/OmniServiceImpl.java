@@ -44,9 +44,9 @@ public class OmniServiceImpl implements OmniService  {
      * @return
      */
     @Override
-    public Integer height() {
-        Integer count = bitcoinClient.getBlockCount();
-        Integer height = count - 1;
+    public Long height() {
+        Long count = Long.valueOf(bitcoinClient.getBlockCount());
+        Long height = count - 1;
         log.info("block height [{}]" , height);
         return height;
     }
