@@ -92,6 +92,14 @@ public class Trc20ServiceImpl implements Trc20Service{
         jsonAddress.put("hexAddress", hexString);
         jsonAddress.put("privateKey", priKeyStr);
         jsonAddress.put("account", accountName);
+        try{
+            jsonAddress.put("walletFile", TrxUtils.encrypt(base58check+accountName,priKeyStr));
+        }catch (Exception e){
+
+        }
+
+
+
         return jsonAddress.toJSONString();
     }
 
