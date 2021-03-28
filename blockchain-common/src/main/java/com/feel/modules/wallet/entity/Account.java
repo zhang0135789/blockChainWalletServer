@@ -41,4 +41,7 @@ public class Account implements Serializable {
 
     @ApiModelProperty(name = "createDate" , value = "创建时间")
     private Date createDate;
+
+    @ApiModelProperty(name = "status" , value = "状态:0:无需归集 1:需要归集")
+    private Integer status = 0;
 }

@@ -37,19 +37,19 @@ public class Coin implements Serializable {
     @ApiModelProperty(name = "defaultMinerFee" , value = "")
     private BigDecimal defaultMinerFee;
 
-    @ApiModelProperty(name = "withdrawAddress" , value = "")
+    @ApiModelProperty(name = "withdrawAddress" , value = "手续费地址")
     private String withdrawAddress;
 
-    @ApiModelProperty(name = "withdrawWallet" , value = "")
+    @ApiModelProperty(name = "withdrawWallet" , value = "手续费钱包")
     private String withdrawWallet;
 
-    @ApiModelProperty(name = "withdrawWalletPassword" , value = "")
+    @ApiModelProperty(name = "withdrawWalletPassword" , value = "手续费钱包密码")
     private String withdrawWalletPassword;
 
-    @ApiModelProperty(name = "minCollectAmount" , value = "")
+    @ApiModelProperty(name = "minCollectAmount" , value = "最小归集金额")
     private BigDecimal minCollectAmount;
 
-    @ApiModelProperty(name = "gasLimit" , value = "")
+    @ApiModelProperty(name = "gasLimit" , value = "gas上限")
     private BigInteger gasLimit;
 
     @ApiModelProperty(name = "gasSpeedUp" , value = "")
@@ -61,7 +61,7 @@ public class Coin implements Serializable {
     @ApiModelProperty(name = "ignoreFromAddress" , value = "")
     private String ignoreFromAddress;
 
-    @ApiModelProperty(name = "masterAddress" , value = "")
+    @ApiModelProperty(name = "masterAddress" , value = "归集主地址")
     private String masterAddress;
 
 }

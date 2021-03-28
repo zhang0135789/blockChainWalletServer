@@ -40,4 +40,6 @@ public interface WalletService {
      * @return
      */
     String transfer(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception;
+
+
 }
