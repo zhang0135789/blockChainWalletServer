@@ -3,6 +3,7 @@ package com.feel.modules.wallet.entity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,6 +21,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Recharge implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -45,6 +47,6 @@ public class Recharge implements Serializable {
     @ApiModelProperty(name = "toAddress" , value = "收款地址")
     private String toAddress;
 
-    @ApiModelProperty(name = "status" , value = "状态 ")
+    @ApiModelProperty(name = "status" , value = "状态 0:收到冲值 1")
     private int status = 0;
 }

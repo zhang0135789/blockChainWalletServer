@@ -38,11 +38,11 @@ swagger:
 
 coin:
   #节点地址
-  rpc: http://localhost:8000/
+  rpc: "http://localhost:8485/"
   #token名称
   name: USDT
   #单位
-  uint: USDT
+  unit: EUSDT
   #节点密码
   password: 123456
   #
@@ -55,11 +55,31 @@ coin:
   default-miner-fee: 0.0001
   # 最小归集金额
   min-collect-amount: 1
+  # keystore存放地址
+  keystore-path: /home/zz/data/eth/data/keystore
 
+# 合约配置
+contract:
+  #erc20-usdt合约地址
+  address: 0xdac17f958d2ee523a2206206994597c13d831ec7
+  #合约单位
+  #wei:0,kwei:3,wwei:4,mwei:6,gwei:9,szabo:12,finney:15,ether:18,kether:21,mether:24,gether:27
+  decimals: mwei
+  #手续费
+  gas-limit: 50000
+
+etherscan:
+  token: BYFVKAANT5JVQPURWJMUAEUFCKGZ56P68
+
+# 扫快规则
 rule:
+  # 初始化区块高度
   initBlockHeight: "latest"
+  #扫描间隔时间
   interval: 5000
-  step: 5
+  #间隔区块
+  step: 6
+  #确认次数
   confirmation: 3
 
 

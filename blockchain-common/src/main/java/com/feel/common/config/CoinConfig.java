@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
  * @Modified By
  */
 @Configuration
-@ConditionalOnProperty(name = "coin.name")
 public class CoinConfig {
 
     /**

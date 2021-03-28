@@ -2,8 +2,10 @@ package com.feel.modules.wallet.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
 
@@ -16,6 +18,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ScanRule implements Serializable {
     private static final long serialVersionUID = 1L;
 

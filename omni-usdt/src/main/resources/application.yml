@@ -42,7 +42,7 @@ coin:
   #token名称
   name: USDT
   #单位
-  uint: USDT
+  unit: USDT
   #节点密码
   password: 123456
   #

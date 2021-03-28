@@ -1,5 +1,8 @@
 package com.feel.modules.wallet.service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 /**
  * @Author: zz
  * @Description:
@@ -8,4 +11,14 @@ package com.feel.modules.wallet.service;
  */
 public interface Erc20Service extends WalletService{
 
+
+    /**
+     * 获取矿工费
+     * @param gasLimit
+     * @return
+     */
+    BigDecimal getMinerFee(BigInteger gasLimit) throws Exception;
+
+
+    BigDecimal getEthBalance(String address) throws Exception;
 }

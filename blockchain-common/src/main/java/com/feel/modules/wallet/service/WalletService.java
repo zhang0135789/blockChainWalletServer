@@ -22,7 +22,7 @@ public interface WalletService {
      * 区块高度
      * @return
      */
-    Long height() throws Exception;
+    Long height();
 
     /**
      * 获取地址总资产
