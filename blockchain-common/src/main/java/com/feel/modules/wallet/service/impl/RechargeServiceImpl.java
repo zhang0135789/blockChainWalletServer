@@ -29,7 +29,7 @@ public class RechargeServiceImpl implements RechargeService {
     private Coin coin;
 
     public String getCollectionName(){
-        return coin.getUnit() + "_deposit";
+        return coin.getUnit() + "_recharge";
     }
 
     /**

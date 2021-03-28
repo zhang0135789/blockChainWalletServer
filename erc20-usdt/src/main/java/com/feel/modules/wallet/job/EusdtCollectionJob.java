@@ -31,11 +31,6 @@ public class EusdtCollectionJob implements CollectionJob {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private Erc20Service erc20Service;
-
-    @Autowired
-    private Contract contract;
 
     @Autowired
     private AccountCollectionService accountCollectionService;
@@ -59,7 +54,12 @@ public class EusdtCollectionJob implements CollectionJob {
     @Scheduled(cron = "${collection.collectionCoin}")
     public void collectionCoin() {
         log.info("======> 开始归集");
-
+        try {
+            AccountCollection accountCollection = new AccountCollection(accountService , 100);
+            accountCollection.runCollectionCoin(accountCollectionService);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
