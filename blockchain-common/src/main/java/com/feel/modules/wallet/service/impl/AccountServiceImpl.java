@@ -55,6 +55,8 @@ public class AccountServiceImpl implements AccountService {
         return mongoTemplate.findOne(query , Account.class , getCollectionName(coinUnit));
     }
 
+
+
     /**
      *  根据账户名和代币名查询账户信息
      * @param username
@@ -128,7 +130,7 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public Account saveOne(String username, String address) {
-        removeByName(username);
+//        removeByName(username);
         Account account = new Account();
         account.setAccount(username);
         account.setAddress(address.toLowerCase());
@@ -151,6 +153,9 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> findAll() {
         return mongoTemplate.findAll(Account.class,getCollectionName());
     }
+
+
+
 
     /**
      * 统计所有账户数量
@@ -180,6 +185,23 @@ public class AccountServiceImpl implements AccountService {
         query.with(page);
         return mongoTemplate.find(query , Account.class , getCollectionName());
     }
+
+    /**
+     * 查找所有需要归集账户
+     * @return
+     */
+    @Override
+    public List<Account> findCollections(int pageNo, int pageSize) {
+        Query query = new Query();
+        Criteria criteria = Criteria.where("status").is(1);
+        Sort.Order order = new Sort.Order(Sort.Direction.ASC, "_id");
+        Sort sort = Sort.by(order);
+        PageRequest page = PageRequest.of(pageNo, pageSize, sort);
+        query.with(page);
+        query.addCriteria(criteria);
+        return mongoTemplate.find(query,Account.class,getCollectionName());
+    }
+
 
     /**
      * 根据余额查询账户信息

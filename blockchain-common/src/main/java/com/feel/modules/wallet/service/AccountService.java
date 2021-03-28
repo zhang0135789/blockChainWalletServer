@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface AccountService {
 
+
+
     /**
      * 根据username 和 代币合约 查询账户信息
      * @param coinUnit
@@ -72,6 +74,14 @@ public interface AccountService {
     List<Account> findAll();
 
     Account save(Account account);
+
+    /**
+     * * 查找所有需要归集账户
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    List<Account> findCollections(int pageNo, int pageSize);
 
     /**
      * 查询所有账户数量

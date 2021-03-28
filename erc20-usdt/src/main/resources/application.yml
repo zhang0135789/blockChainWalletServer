@@ -83,3 +83,10 @@ rule:
   confirmation: 3
 
 
+#归集任务
+collection:
+  # 每两个小时检查一次
+  collectionCoin: "0 0 */2 * * ?"
+  # 每3个小时检查一次
+  checkAccount: "0 0 */3 * * ?"
+

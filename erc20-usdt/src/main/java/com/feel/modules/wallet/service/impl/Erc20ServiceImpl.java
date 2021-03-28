@@ -151,8 +151,6 @@ public class Erc20ServiceImpl implements Erc20Service {
         String txid = transferToken(from,to,amount,true);
 
 
-
-
         log.info("erc20-usdt transfer : txid[{}]" , txid);
         return txid;
     }
@@ -195,7 +193,7 @@ public class Erc20ServiceImpl implements Erc20Service {
                 .to(to)
                 .unit(coin.getUnit())
                 .build();
-        return handlePayment(payment);
+        return handlePaymentToken(payment);
     }
 
     /**
@@ -203,7 +201,7 @@ public class Erc20ServiceImpl implements Erc20Service {
      * @param payment
      * @return
      */
-    private String handlePayment(Payment payment) {
+    private String handlePaymentToken(Payment payment) {
         try {
             EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(payment.getCredentials().getAddress(), DefaultBlockParameterName.LATEST)
                     .sendAsync()
@@ -257,6 +255,99 @@ public class Erc20ServiceImpl implements Erc20Service {
         EthGetBalance getBalance = web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).send();
         return Convert.fromWei(getBalance.getBalance().toString(), Convert.Unit.ETHER);
     }
+
+    /**
+     * 发送eth
+     * @param toAddress
+     * @param amount
+     * @param sync
+     * @param withdrawId
+     * @return
+     */
+    @Override
+    public String transferFromEthWithdrawWallet(String toAddress, BigDecimal amount, boolean sync, String withdrawId) {
+        return transferEth(coin.getKeystorePath() + "/" + coin.getWithdrawWallet(), coin.getWithdrawWalletPassword(), toAddress, amount, sync,withdrawId);
+    }
+
+    /**
+     *
+     * @param walletFile
+     * @param password
+     * @param toAddress
+     * @param amount
+     * @param sync
+     * @param withdrawId
+     * @return
+     */
+    private String transferEth(String walletFile, String password, String toAddress, BigDecimal amount, boolean sync, String withdrawId) {
+        Credentials credentials;
+        try {
+            credentials = WalletUtils.loadCredentials(password, walletFile);
+        } catch (IOException e) {
+            log.error("钱包文件不存在",e);
+            return null;
+        } catch (CipherException e) {
+            log.error("解密失败，密码不正确",e);
+            return null;
+        }
+        return handletransferEth(credentials, toAddress, amount);
+    }
+
+    /**
+     *
+     * @param credentials
+     * @param toAddress
+     * @param amount
+     * @return
+     */
+    private String handletransferEth(Credentials credentials, String toAddress, BigDecimal amount) {
+        Payment payment = Payment.builder()
+                .credentials(credentials)
+                .amount(amount)
+                .to(toAddress)
+                .unit("ETH")
+                .build();
+        return handlePaymentEth(payment);
+    }
+
+    private String handlePaymentEth(Payment payment) {
+        try {
+            EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(payment.getCredentials().getAddress(), DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+
+            BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+            BigInteger gasPrice = getGasPrice();
+            BigInteger value = Convert.toWei(payment.getAmount(), Convert.Unit.ETHER).toBigInteger();
+
+            BigInteger maxGas = coin.getGasLimit();
+            log.info("value={},gasPrice={},gasLimit={},nonce={},address={}", value, gasPrice, maxGas, nonce, payment.getTo());
+            RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
+                    nonce, gasPrice, maxGas, payment.getTo(), value);
+
+            byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, payment.getCredentials());
+            String hexValue = Numeric.toHexString(signedMessage);
+            EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).sendAsync().get();
+            String txid = ethSendTransaction.getTransactionHash();
+            log.info("txid = {}", txid);
+            if (StringUtils.isEmpty(txid)) {
+                log.error("发送交易失败");
+                return null;
+            }
+            else {
+                if(etherApiUtils != null){
+                    log.info("=====发送Etherscan广播交易======");
+                    etherApiUtils.sendRawTransaction(hexValue);
+                }
+                return txid;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("eth 交易失败,error",e);
+            return null;
+        }
+    }
+
 
 
     /**
