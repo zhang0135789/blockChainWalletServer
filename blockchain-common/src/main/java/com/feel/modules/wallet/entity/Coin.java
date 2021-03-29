@@ -46,6 +46,9 @@ public class Coin implements Serializable {
     @ApiModelProperty(name = "withdrawWalletPassword" , value = "手续费钱包密码")
     private String withdrawWalletPassword;
 
+    @ApiModelProperty(name = "collectionAddress" , value = "归集地址")
+    private String collectionAddress;
+
     @ApiModelProperty(name = "minCollectAmount" , value = "最小归集金额")
     private BigDecimal minCollectAmount;
 

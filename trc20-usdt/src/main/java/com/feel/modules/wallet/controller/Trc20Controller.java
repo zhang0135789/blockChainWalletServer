@@ -1,5 +1,6 @@
 package com.feel.modules.wallet.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.feel.modules.wallet.entity.Account;
 import com.feel.modules.wallet.service.AccountService;
@@ -34,10 +35,14 @@ public class Trc20Controller extends WalletController<Trc20Service>{
     @Override
     @GetMapping("/getNewAddress")
     @ApiOperation("获取新地址")
-    public R<String> getNewAddress(String accountName) throws NoSuchAlgorithmException {
+    public R<String> getNewAddress(String accountName) {
+        Account account = accountService.findByName(accountName);
+        if(ObjectUtil.isNotEmpty(account)) {
+            return R.ok(account);
+        }
         String addressInfo = walletService.createNewAddress(accountName);
 
-        Account account  = JSONObject.parseObject(addressInfo,Account.class);
+        account  = JSONObject.parseObject(addressInfo,Account.class);
         accountService.save(account);
         return R.ok(account.getAddress());
     }

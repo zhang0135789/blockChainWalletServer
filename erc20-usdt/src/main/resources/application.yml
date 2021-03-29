@@ -38,7 +38,7 @@ swagger:
 
 coin:
   #节点地址
-  rpc: "http://localhost:8485/"
+  rpc: "http://localhost:8545/"
   #token名称
   name: USDT
   #单位
@@ -49,14 +49,19 @@ coin:
   step: 10
   #初始化扫描块高
   init-block-height: 50000
-  #归集地址
+  # 手续费地址
   withdraw-address:
+  # 手续费钱包
+  withdraw-wallet:
+  # 归集地址
+  collection-address:
   #默认矿工费
   default-miner-fee: 0.0001
   # 最小归集金额
-  min-collect-amount: 1
+  min-collect-amount: 50
   # keystore存放地址
   keystore-path: /home/zz/data/eth/data/keystore
+
 
 # 合约配置
 contract:

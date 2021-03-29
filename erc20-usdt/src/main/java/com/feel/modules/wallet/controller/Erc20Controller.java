@@ -57,12 +57,7 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     @GetMapping("/height")
     @ApiOperation("获取区块高度")
     public R<Long> getBlockHeight() {
-        Long height = null;
-        try {
-            height = walletService.height();
-        } catch (Exception e) {
-            return R.error("获取高度失败");
-        }
+        Long height = walletService.height();
         return R.ok(height);
     }
 

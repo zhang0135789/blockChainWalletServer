@@ -37,7 +37,10 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
     @Autowired
     private CollectionService collectionService;
 
-
+    /**
+     * 检查账户手续费
+     * @param account
+     */
     @Override
     public void checkAccount(Account account) {
         try {
@@ -65,17 +68,22 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
         }
     }
 
+    /**
+     * 归集
+     * @param account
+     */
     @Override
     public void collectionCoin(Account account) {
         try {
+            String collectionAddress = coin.getCollectionAddress();
             BigDecimal minerFee = erc20Service.getMinerFee(contract.getGasLimit());
             BigDecimal tokenBalance = erc20Service.getBalance(account.getAddress());
-            String hash = erc20Service.transfer(account.getAddress(), coin.getMasterAddress(), tokenBalance, minerFee);
+            String hash = erc20Service.transfer(account.getAddress(), collectionAddress, tokenBalance, minerFee);
             log.info("collection success : from[{}],to[{}],amount[{}],hash[{}]",account.getAddress(),coin.getMasterAddress(),tokenBalance,minerFee);
             //TODO 归集记录
             CollectionTran collectionTran = new CollectionTran();
             collectionTran.setFromAddress(account.getAddress());
-            collectionTran.setToAddress(coin.getMasterAddress());
+            collectionTran.setToAddress(collectionAddress);
             collectionTran.setAmount(tokenBalance);
             collectionTran.setTxid(hash);
             collectionTran.setTime(new Date());
