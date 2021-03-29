@@ -42,11 +42,17 @@ public class ScanLogServiceImpl implements ScanLogService {
             update.set("updateTime",new Date());
             UpdateResult result = mongoTemplate.updateFirst(query, update, getCollectionName());
         }else {
-            scanLog.setCreateTime(new Date());
-            scanLog.setUpdateTime(new Date());
-            scanLog.setCoinName(coinName);
-            scanLog.setLastSyncHeight(blockHeight);
-            ScanLog insert = mongoTemplate.insert(scanLog, getCollectionName());
+            ScanLog scanLog1 = ScanLog.builder()
+                    .coinName(coinName)
+                    .createTime(new Date())
+                    .updateTime(new Date())
+                    .lastSyncHeight(blockHeight)
+                    .build();
+//            scanLog.setCreateTime(new Date());
+//            scanLog.setUpdateTime(new Date());
+//            scanLog.setCoinName(coinName);
+//            scanLog.setLastSyncHeight(blockHeight);
+            ScanLog insert = mongoTemplate.insert(scanLog1, getCollectionName());
         }
     }
 

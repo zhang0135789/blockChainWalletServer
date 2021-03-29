@@ -49,10 +49,10 @@ public class TrcScanDataJob extends ScanDataJob {
 //                            String txId = JSON.parseObject(e.toString()).getString("id");
                             String txId = JSON.parseObject(e.toString()).getString("txID");
                             //判断 数据库 txId 有 就不用往下继续了
-                            if(txId.equals("15b7a100216d040df5bcebff51b217b7c749db614f787f24dfc0a448eb13ab44")){
-                                log.info("txid------------"+txId);
-                                log.info(transactionInfoByBlockNum);
-                            }
+//                            if(txId.equals("15b7a100216d040df5bcebff51b217b7c749db614f787f24dfc0a448eb13ab44")){
+//                                log.info("txid------------"+txId);
+//                                log.info(transactionInfoByBlockNum);
+//                            }
 
                         accounts.forEach( k -> {
                             Recharge recharge = Recharge.builder()

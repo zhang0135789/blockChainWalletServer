@@ -1,4 +1,16 @@
 package com.feel.common.utils;
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
+import org.apache.commons.codec.binary.Base64;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +20,8 @@ import java.util.List;
  * @Description:
  */
 public class TrxUtils {
-
+    private static final String KEY_ALGORITHM = "AES";
+    private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
 
     /**
      * 长度不够前面补0
@@ -208,6 +221,58 @@ public class TrxUtils {
         } else {
             return str.substring(f, t);
         }
+    }
+
+
+    public static String encrypt(String passwd, String content) throws Exception {
+        // 创建密码器
+        Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+
+        byte[] byteContent = content.getBytes("utf-8");
+
+        // 初始化为加密模式的密码器
+        cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(passwd));
+
+        // 加密
+        byte[] result = cipher.doFinal(byteContent);
+
+        //通过Base64转码返回
+        return Base64.encodeBase64String(result);
+    }
+
+    public static String decrypt(String passwd, String encrypted) throws Exception {
+        //实例化
+        Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
+
+        //使用密钥初始化，设置为解密模式
+        cipher.init(Cipher.DECRYPT_MODE, getSecretKey(passwd));
+
+        //执行操作
+        byte[] result = cipher.doFinal(Base64.decodeBase64(encrypted));
+
+        return new String(result, "utf-8");
+    }
+
+    /**
+     * 生成加密秘钥
+     *
+     * @return
+     */
+    private static SecretKeySpec getSecretKey(final String password) throws NoSuchAlgorithmException {
+        //返回生成指定算法密钥生成器的 KeyGenerator 对象
+        KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
+        // javax.crypto.BadPaddingException: Given final block not properly padded解决方案
+        // https://www.cnblogs.com/zempty/p/4318902.html - 用此法解决的
+        // https://www.cnblogs.com/digdeep/p/5580244.html - 留作参考吧
+        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+        random.setSeed(password.getBytes());
+        //AES 要求密钥长度为 128
+        kg.init(128, random);
+
+        //生成一个密钥
+        SecretKey secretKey = kg.generateKey();
+        // 转换为AES专用密钥
+        return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
     }
 
 }

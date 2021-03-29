@@ -91,6 +91,15 @@ public class Trc20ServiceImpl implements Trc20Service{
         jsonAddress.put("address", base58check);
         jsonAddress.put("hexAddress", hexString);
         jsonAddress.put("privateKey", priKeyStr);
+        jsonAddress.put("account", accountName);
+        try{
+            jsonAddress.put("walletFile", TrxUtils.encrypt(base58check+accountName,priKeyStr));
+        }catch (Exception e){
+
+        }
+
+
+
         return jsonAddress.toJSONString();
     }
 
@@ -563,8 +572,7 @@ public class Trc20ServiceImpl implements Trc20Service{
         // 合约地址
         String contract_address = parseObject.getJSONObject("raw_data").getJSONArray("contract").getJSONObject(0).getJSONObject("parameter").getJSONObject("value").getString("contract_address");
         contract_address = WalletApi.encode58Check(ByteArray.fromHexString(contract_address));
-        Long timestamp =  parseObject.getJSONObject("raw_data").getLong("timestamp");
-        String bolckHash = parseObject.getString("txID");
+        Long timestamp =  parseObject.getJSONObject("raw_data").getLong("expiration");
         Long blockHeight = parseObject.getLong("blockNumber");
         String dataStr = data.substring(8);
         List<String> strList = TrxUtils.getStrList(dataStr, 64);

@@ -75,7 +75,7 @@ rule:
   initBlockHeight: 28715136
   interval: 5000
   step: 5
-  confirmation: 3
+  confirmation: 19
 
 
 

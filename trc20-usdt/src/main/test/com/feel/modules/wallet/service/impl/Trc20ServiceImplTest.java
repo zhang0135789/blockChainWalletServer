@@ -6,6 +6,7 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.feel.common.utils.Constant;
+import com.feel.common.utils.TrxUtils;
 import org.apache.tomcat.util.descriptor.web.JspConfigDescriptorImpl;
 import org.junit.jupiter.api.Test;
 import org.tron.common.utils.ByteArray;
@@ -62,13 +63,10 @@ class Trc20ServiceImplTest {
         System.out.println(res);
     }
     @Test
-    void trx(){
-        String url = Constant.tronUrl + "/wallet/getblockbynum";
-        Map<String, Object> map = new HashMap<>();
-        map.put("num", 28715136);
-        String param = JSON.toJSONString(map);
-        String res = HttpUtil.get(url,map);
-        System.out.println(res);
+    void trx() throws Exception {
+        String str ="f6YmQQvzMyGydgQ4PzXtoR8Dxzu5m12jWMlaqmIzu/BoNhGOCpQdiH6KpasgaUPo3B/tUyywLR5/1G3qNV3BrcunqQFYzedKXSxWxxsUjpw=";
+        System.out.println(TrxUtils.decrypt("TVZUmXwRjJiRKvzuGVQVPzgYxXmWDZH5MXe121212",str));
     }
+
 
 }
