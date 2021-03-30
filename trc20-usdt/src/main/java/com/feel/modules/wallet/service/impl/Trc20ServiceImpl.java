@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.feel.common.utils.Constant;
 import com.feel.common.utils.TrxUtils;
+import com.feel.modules.wallet.entity.Account;
 import com.feel.modules.wallet.entity.Recharge;
+import com.feel.modules.wallet.service.AccountService;
 import com.feel.modules.wallet.service.Trc20Service;
 import com.google.protobuf.Any;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,6 @@ import org.tron.protos.contract.BalanceContract;
 import org.tron.protos.contract.SmartContractOuterClass;
 import org.tron.walletserver.WalletApi;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -71,7 +72,8 @@ public class Trc20ServiceImpl implements Trc20Service{
     @Autowired
     private Environment environment;
 
-
+    @Autowired
+    private AccountService accountService;
 
 
 
@@ -79,28 +81,35 @@ public class Trc20ServiceImpl implements Trc20Service{
      * 创建用户钱包地址
      **/
     @Override
-    public String createNewAddress(String accountName) {
+    public Account createNewAddress(String accountName) throws Exception {
 //        String url = Constant.tronUrl + "/wallet/generateaddress";
         SignInterface sign = SignUtils.getGeneratedRandomSign(Utils.getRandom(), true);
         byte[] priKey = sign.getPrivateKey();
         byte[] address = sign.getAddress();
         String priKeyStr = Hex.encodeHexString(priKey);
-        String base58check = WalletApi.encode58Check(address);
+        String newAddress = WalletApi.encode58Check(address);
         String hexString = ByteArray.toHexString(address);
-        JSONObject jsonAddress = new JSONObject();
-        jsonAddress.put("address", base58check);
-        jsonAddress.put("hexAddress", hexString);
-        jsonAddress.put("privateKey", priKeyStr);
-        jsonAddress.put("account", accountName);
-        try{
-            jsonAddress.put("walletFile", TrxUtils.encrypt(base58check+accountName,priKeyStr));
-        }catch (Exception e){
 
-        }
+//        JSONObject jsonAddress = new JSONObject();
+//        jsonAddress.put("address", newAddress);
+//        jsonAddress.put("hexAddress", hexString);
+//        jsonAddress.put("privateKey", priKeyStr);
+//        jsonAddress.put("account", accountName);
+//        jsonAddress.put("walletFile", TrxUtils.encrypt(newAddress+accountName,priKeyStr));
+
+        String walletFile = TrxUtils.encrypt(newAddress+accountName,priKeyStr);
+
+        Account account = Account.builder()
+                .account(accountName)
+                .address(newAddress)
+                .walletFile(walletFile)
+                .createDate(new Date())
+                .build();
+        account = accountService.saveByName(account , "TRON");
 
 
 
-        return jsonAddress.toJSONString();
+        return account;
     }
 
     /**

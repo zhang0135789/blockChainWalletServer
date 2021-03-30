@@ -1,5 +1,7 @@
 package com.feel.modules.wallet.service;
 
+import com.feel.modules.wallet.entity.Account;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 
@@ -16,7 +18,7 @@ public interface WalletService {
      * @param accountName
      * @return
      */
-    String createNewAddress(String accountName) throws Exception;
+    Account createNewAddress(String accountName) throws Exception;
 
     /**
      * 区块高度

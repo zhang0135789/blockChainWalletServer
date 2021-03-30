@@ -36,21 +36,19 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     @Override
     @GetMapping("/getNewAddress")
     @ApiOperation("获取新地址")
-    public R<Account> getNewAddress(String accountName) {
-        String newAddress = null;
-        Account account = accountService.findByName(accountName);
+    public R<String> getNewAddress(String accountName) {
+        Account account = accountService.findByName("ETH",accountName);
         if(ObjectUtil.isNotEmpty(account)) {
-            return R.ok(account);
+            return R.ok(account.getAddress());
         }
 
         try {
-            newAddress = walletService.createNewAddress(accountName);
+            account = walletService.createNewAddress(accountName);
         } catch (Exception e) {
             log.error("获取地址失败",e);
             return R.error("获取地址失败");
         }
-        account = accountService.saveOne(accountName, newAddress);
-        return R.ok(account);
+        return R.ok(account.getAddress());
     }
 
     @Override
@@ -78,6 +76,7 @@ public class Erc20Controller extends WalletController<Erc20Service>{
         try {
             balance = walletService.getBalance(address);
         } catch (Exception e) {
+            log.error("获取地址总资产失败",e);
             return R.error("获取地址总资产失败");
         }
         return R.ok(balance);

@@ -31,10 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author: zz
@@ -66,13 +63,19 @@ public class Erc20ServiceImpl implements Erc20Service {
      * @return
      */
     @Override
-    public String createNewAddress(String accountName) throws Exception {
-
+    public Account createNewAddress(String accountName) throws Exception {
         String fileName = WalletUtils.generateNewWalletFile("", new File(coin.getKeystorePath()), true);
         Credentials credentials = WalletUtils.loadCredentials("", coin.getKeystorePath() + "/" + fileName);
         String newAddress = credentials.getAddress();
         log.info("new address [{}]" , newAddress);
-        return newAddress;
+        Account account = Account.builder()
+                .account(accountName)
+                .address(newAddress)
+                .walletFile(fileName)
+                .createDate(new Date())
+                .build();
+        account = accountService.saveByName(account,"ETH");
+        return account;
     }
 
     /**

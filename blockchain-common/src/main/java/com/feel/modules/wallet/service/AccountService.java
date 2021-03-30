@@ -14,7 +14,6 @@ import java.util.List;
 public interface AccountService {
 
 
-
     /**
      * 根据username 和 代币合约 查询账户信息
      * @param coinUnit
@@ -67,12 +66,26 @@ public interface AccountService {
      */
     Account saveOne(String username, String address);
 
+
+    /**
+     * 根据
+     * @param account
+     * @param CollectionName
+     * @return
+     */
+    Account saveByName(Account account, String CollectionName);
+
     /**
      * 查询所有账户
      * @return
      */
     List<Account> findAll();
 
+    /**
+     * 保存账户
+     * @param account
+     * @return
+     */
     Account save(Account account);
 
     /**
@@ -132,6 +145,7 @@ public interface AccountService {
      * @param gas
      */
     long updateBalanceAndGas(String address, BigDecimal balance,BigDecimal gas);
+
 
 
 }

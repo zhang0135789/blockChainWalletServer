@@ -16,15 +16,8 @@ import java.util.List;
  */
 public interface Trc20Service extends WalletService{
 
-    public String createNewAddress(String accountName);
 
-    public  String createAccount(String address);
 
-    /**
-     * 区块高度
-     * @return
-     */
-    public Long height() ;
 
     /**
      * 获取地址总资产
@@ -37,7 +30,6 @@ public interface Trc20Service extends WalletService{
     public String trc20Transaction(String symbol, String toAddress, BigDecimal amount);
 
 
-    public BigDecimal getBalance(String address) throws IOException;
 
     /**
      * 交易
