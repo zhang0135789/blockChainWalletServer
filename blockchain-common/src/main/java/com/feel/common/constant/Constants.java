@@ -27,16 +27,4 @@ public class Constants
      */
     public static final String HTTPS = "https://";
 
-
-    /**
-     * omni-usdt代币序号
-     */
-    public static final String PROPERTYID_USDT = "31";
-    /**
-     * omni-usdt 获取代币余额
-     */
-    public static String METHOD_OmniBalance = "omni_getbalance";
-
-
-    public static String METHDO_OmniSend    = "omni_send";
 }

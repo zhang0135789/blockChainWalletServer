@@ -1,6 +1,7 @@
 package com.feel.modules.wallet.service;
 
 import com.feel.modules.wallet.entity.Account;
+import com.feel.modules.wallet.utils.R;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -43,5 +44,15 @@ public interface WalletService {
      */
     String transfer(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception;
 
+
+    /**
+     * 提现接口
+     * @param to
+     * @param amount
+     * @param fee
+     * @return
+     * @throws Throwable
+     */
+    String withdrawTransfer(String to , BigDecimal amount , BigDecimal fee);
 
 }

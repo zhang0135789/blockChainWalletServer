@@ -36,7 +36,7 @@ public abstract class WalletController<S extends WalletService> {
      * @param accountName
      * @return
      */
-    abstract R getNewAddress(String accountName) throws NoSuchAlgorithmException;
+    abstract R getNewAddress(String accountName) ;
 
     /**
      * 获取网络区块高度
@@ -55,7 +55,7 @@ public abstract class WalletController<S extends WalletService> {
      * @param address
      * @return
      */
-    abstract R balance(String address) throws IOException;
+    abstract R balance(String address) ;
 
     /**
      * 转账
@@ -65,6 +65,16 @@ public abstract class WalletController<S extends WalletService> {
      * @param fee
      * @return
      */
-    abstract R transfer(String from , String to , BigDecimal amount , BigDecimal fee) throws Throwable;
+    abstract R transfer(String from , String to , BigDecimal amount , BigDecimal fee);
+
+    /**
+     * 提现接口
+     * @param to
+     * @param amount
+     * @param fee
+     * @return
+     * @throws Throwable
+     */
+    abstract R withdrawTransfer(String to , BigDecimal amount , BigDecimal fee);
 
 }

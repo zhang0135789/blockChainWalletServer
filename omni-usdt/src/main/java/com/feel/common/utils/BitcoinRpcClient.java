@@ -1,6 +1,7 @@
 package com.feel.common.utils;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.feel.common.constant.BtcConstants;
 import com.feel.common.constant.Constants;
 import com.savl.bitcoin.rpc.client.BitcoinJSONRPCClient;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +38,11 @@ public class BitcoinRpcClient extends BitcoinJSONRPCClient {
      */
     public BigDecimal getOmniBalance(String address) {
         String balance = "0";
-        Integer propertyid = Integer.valueOf(Constants.PROPERTYID_USDT);
+        Integer propertyid = Integer.valueOf(BtcConstants.PROPERTYID_USDT);
         try {
             log.info("omni balance : address[{}]" , address);
             Map<String, Object> map = (Map<String, Object>) query(
-                        Constants.METHOD_OmniBalance,
+                    BtcConstants.METHOD_OmniBalance,
                         new Object[] { address, propertyid }
                     );
             if (CollectionUtil.isNotEmpty(map)) {
@@ -64,11 +65,11 @@ public class BitcoinRpcClient extends BitcoinJSONRPCClient {
         try{
             log.info("omni send : from[{}] ,to[{}],amount[{}]",from,to,amount);
             String txid =  query(
-                    Constants.METHDO_OmniSend,
+                    BtcConstants.METHDO_OmniSend,
                     new Object[]{
                             from,
                             to,
-                            Integer.valueOf(Constants.PROPERTYID_USDT),
+                            Integer.valueOf(BtcConstants.PROPERTYID_USDT),
                             amount.toPlainString()
                     }
             ).toString();
