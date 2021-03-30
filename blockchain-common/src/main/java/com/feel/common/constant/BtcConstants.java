@@ -6,7 +6,7 @@ package com.feel.common.constant;
  * @Date: 11:28 AM 3/30/21
  * @Modified By
  */
-public class BtcConstant {
+public class BtcConstants {
 
 
     /**
