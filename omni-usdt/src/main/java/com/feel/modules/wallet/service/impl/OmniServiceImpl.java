@@ -1,13 +1,16 @@
 package com.feel.modules.wallet.service.impl;
 
 import com.feel.common.utils.BitcoinRpcClient;
+import com.feel.modules.wallet.entity.Account;
 import com.feel.modules.wallet.entity.Coin;
+import com.feel.modules.wallet.service.AccountService;
 import com.feel.modules.wallet.service.OmniService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @Author: zz
@@ -26,6 +29,8 @@ public class OmniServiceImpl implements OmniService  {
     @Autowired
     private Coin coin;
 
+    @Autowired
+    private AccountService accountService;
 
     /**
      * 创建地址
@@ -33,10 +38,20 @@ public class OmniServiceImpl implements OmniService  {
      * @return
      */
     @Override
-    public String createNewAddress(String accountName) {
+    public Account createNewAddress(String accountName) {
         String newAddress = bitcoinClient.getNewAddress(accountName);
-        log.info("new address [{}]" , newAddress);
-        return newAddress;
+
+        Account account = Account.builder()
+                .account(accountName)
+                .address(newAddress)
+//                .walletFile(fileName)
+                .createDate(new Date())
+                .build();
+
+        account = accountService.saveByName(account,"BTC");
+
+        log.info("new address [{}]" , account.getAddress());
+        return account;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.feel.modules.wallet.service.impl.e;
+package com.feel.modules.wallet.service.impl;
 
 
 
@@ -7,8 +7,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import com.feel.common.utils.TrxUtils;
+import com.feel.modules.wallet.entity.Coin;
 import org.apache.tomcat.util.descriptor.web.JspConfigDescriptorImpl;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.tron.common.utils.ByteArray;
 import org.tron.walletserver.WalletApi;
 
@@ -20,7 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class Trc20ServiceImplTest {
+@SpringBootTest
+public class Trc20ServiceImplTest {
+
+    @Autowired
+    private Coin coin;
 
     @Test
     void createNewAddress() {
@@ -33,7 +40,7 @@ class Trc20ServiceImplTest {
 
     @Test
     void height() throws IOException {
-        String url =  "/wallet/getnowblock";
+        String url =  coin.getRpc() + "/wallet/getnowblock";
         //String url = Constant.tronUrl + "/wallet/gettransactioninfobyblocknum";
         String res = HttpUtil.get(url);
         System.out.println(res);
@@ -47,13 +54,13 @@ class Trc20ServiceImplTest {
 
     @Test
     void contractAddress() throws IOException {
-        String url = "Constant.tronUrl "+ "/v1/contracts/"+"Constant.contract"+"/transactions";
-        JSONObject param = new JSONObject();
-        param.put("only_confirmed",true);
-       // param.put("min_block_timestamp",1616901934440L);
-
-        String result =HttpUtil.get(url, param);
-        System.out.println(result);
+//        String url = "Constant.tronUrl "+ "/v1/contracts/"+"Constant.contract"+"/transactions";
+//        JSONObject param = new JSONObject();
+//        param.put("only_confirmed",true);
+//       // param.put("min_block_timestamp",1616901934440L);
+//
+//        String result =HttpUtil.get(url, param);
+//        System.out.println(result);
 
     }
 

@@ -1,5 +1,6 @@
 package com.feel.modules.wallet.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.feel.modules.wallet.entity.Account;
 import com.feel.modules.wallet.service.AccountService;
 import com.feel.modules.wallet.service.OmniService;
@@ -33,15 +34,18 @@ public class OmniController extends WalletController<OmniService>{
     @GetMapping("/getNewAddress")
     @ApiOperation("获取新地址")
     public R<Account> getNewAddress(String accountName) {
-        String newAddress = null;
+        Account account = accountService.findByName("BTC",accountName);
+        if(ObjectUtil.isNotEmpty(account)) {
+            return R.ok(account.getAddress());
+        }
+
         try {
-            newAddress = walletService.createNewAddress(accountName);
+            account = walletService.createNewAddress(accountName);
         } catch (Exception e) {
             log.error("生成地址失败" , e);
             return R.error("生成地址失败");
         }
-        Account account = accountService.saveOne(accountName, newAddress);
-        return R.ok(account);
+        return R.ok(account.getAddress());
     }
 
     @Override
