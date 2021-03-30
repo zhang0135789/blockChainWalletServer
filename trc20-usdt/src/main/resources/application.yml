@@ -73,7 +73,7 @@ contract:
   #wei:0,kwei:3,wwei:4,mwei:6,gwei:9,szabo:12,finney:15,ether:18,kether:21,mether:24,gether:27
   decimals: mwei
   #合約精度
-  decimal: 100000
+  decimal: 1000000
   #手续费
   gas-limit: 50000
 
