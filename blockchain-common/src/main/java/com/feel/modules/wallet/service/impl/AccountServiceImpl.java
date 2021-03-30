@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,11 +34,11 @@ public class AccountServiceImpl implements AccountService {
     private Coin coin;
 
     public String getCollectionName() {
-        return coin.getUnit() + "_address";
+        return coin.getUnit() + "_address_book";
     }
 
     public String getCollectionName(String name) {
-        return name + "_address";
+        return name + "_address_book";
     }
 
 
@@ -135,6 +136,11 @@ public class AccountServiceImpl implements AccountService {
         account.setAccount(username);
         account.setAddress(address.toLowerCase());
         return save(account);
+    }
+
+    @Override
+    public Account saveByName(Account account, String collectionName) {
+        return mongoTemplate.insert(account,getCollectionName(collectionName));
     }
 
     /**
