@@ -153,9 +153,21 @@ public class Erc20ServiceImpl implements Erc20Service {
 
         String txid = transferToken(from,to,amount,true);
 
-
         log.info("erc20-usdt transfer : txid[{}]" , txid);
         return txid;
+    }
+
+    /**
+     * 提现
+     * @param to
+     * @param amount
+     * @param fee
+     * @return
+     */
+    @Override
+    public String withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
+
+        return transferToken(coin.getWithdrawAddress(), to, amount, true);
     }
 
     /**
@@ -200,7 +212,7 @@ public class Erc20ServiceImpl implements Erc20Service {
     }
 
     /**
-     * 执行 payment交易
+     * 执行 payment 交易  usdt
      * @param payment
      * @return
      */
@@ -336,8 +348,7 @@ public class Erc20ServiceImpl implements Erc20Service {
             if (StringUtils.isEmpty(txid)) {
                 log.error("发送交易失败");
                 return null;
-            }
-            else {
+            } else {
                 if(etherApiUtils != null){
                     log.info("=====发送Etherscan广播交易======");
                     etherApiUtils.sendRawTransaction(hexValue);
