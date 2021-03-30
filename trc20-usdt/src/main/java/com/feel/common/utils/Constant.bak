@@ -1,8 +1,16 @@
 package com.feel.common.utils;
 
+import com.feel.common.config.CoinConfig;
+import com.feel.modules.wallet.entity.Coin;
+import org.tron.protos.Protocol;
+
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 
 public class Constant {
+
+    @Resource
+    private Coin coin;
 
     public static final String shastaTestNetUrl = "https://api.shasta.trongrid.io";
 
@@ -16,6 +24,7 @@ public class Constant {
      */
     public static BigDecimal decimal = new BigDecimal("1000000");
 
+
     /**
      * trc20合约地址 这个是shasta测试网上面的一个trc20代币
      */
@@ -23,7 +32,7 @@ public class Constant {
 //    public  static String contract = "TAozjQdXvMrBWZLUDZCvQVqNBmZ1jfWYny";
 
     //主网？
-    public  static String contract = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
+    public  static String contract = coin.getContractAddress();
 
 
 

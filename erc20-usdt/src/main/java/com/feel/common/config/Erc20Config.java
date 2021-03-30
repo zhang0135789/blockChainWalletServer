@@ -49,17 +49,7 @@ public class Erc20Config {
         return web3j;
     }
 
-    /**
-     * 初始化erc20-usdt合约配置
-     * @return
-     */
-    @Bean
-    @ConfigurationProperties(prefix = "contract")
-    public Contract getContract(){
-        Contract contract = new Contract();
-        log.info("======>初始化erc20-usdt 合约配置");
-        return contract;
-    }
+
 
 
     /**

@@ -1,6 +1,7 @@
 package com.feel.common.config;
 
 import com.feel.modules.wallet.entity.Coin;
+import com.feel.modules.wallet.entity.Contract;
 import com.feel.modules.wallet.entity.ScanRule;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -36,5 +37,16 @@ public class CoinConfig {
     public ScanRule getScanRule() {
         ScanRule scanRule = new ScanRule();
         return scanRule;
+    }
+
+    /**
+     * 初始化合约配置
+     * @return
+     */
+    @Bean
+    @ConfigurationProperties(prefix = "contract")
+    public Contract getContract(){
+        Contract contract = new Contract();
+        return contract;
     }
 }

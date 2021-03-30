@@ -42,7 +42,7 @@ swagger:
 coin:
   enabled: true
   #节点地址
-  rpc: http://localhost:8000/
+  rpc: https://api.trongrid.io
   #token名称
   name: TRCUSDT
   #单位
@@ -62,7 +62,7 @@ coin:
   #默认矿工费
   default-miner-fee: 0.0001
   # 最小归集金额
-  min-collect-amount: 1
+  min-collect-amount: 10
 
 
 # 合约配置
@@ -72,6 +72,8 @@ contract:
   #合约单位
   #wei:0,kwei:3,wwei:4,mwei:6,gwei:9,szabo:12,finney:15,ether:18,kether:21,mether:24,gether:27
   decimals: mwei
+  #合約精度
+  decimal: 100000
   #手续费
   gas-limit: 50000
 
