@@ -52,4 +52,7 @@ public interface Trc20Service extends WalletService{
     public  String getTransactionInfoByBlockNum(BigInteger num);
     public  String getTransactionById(String txId);
     public Recharge triggerSmartContract(List<String> addressList, String txId, JSONObject parseObject);
+    public  String getTrc20Account(String contractAddress, String address);
+    public  String getAccount(String address);
+    public  String transaction(String toAddress, BigDecimal amount);
 }

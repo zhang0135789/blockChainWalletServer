@@ -1,11 +1,11 @@
-package com.feel.modules.wallet.service.impl;
+package com.feel.modules.wallet.service.impl.e;
 
 
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.feel.common.utils.Constant;
+
 import com.feel.common.utils.TrxUtils;
 import org.apache.tomcat.util.descriptor.web.JspConfigDescriptorImpl;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class Trc20ServiceImplTest {
 
     @Test
     void height() throws IOException {
-        String url = Constant.tronUrl + "/wallet/getnowblock";
+        String url =  "/wallet/getnowblock";
         //String url = Constant.tronUrl + "/wallet/gettransactioninfobyblocknum";
         String res = HttpUtil.get(url);
         System.out.println(res);
@@ -47,7 +47,7 @@ class Trc20ServiceImplTest {
 
     @Test
     void contractAddress() throws IOException {
-        String url = Constant.tronUrl + "/v1/contracts/"+Constant.contract+"/transactions";
+        String url = "Constant.tronUrl "+ "/v1/contracts/"+"Constant.contract"+"/transactions";
         JSONObject param = new JSONObject();
         param.put("only_confirmed",true);
        // param.put("min_block_timestamp",1616901934440L);

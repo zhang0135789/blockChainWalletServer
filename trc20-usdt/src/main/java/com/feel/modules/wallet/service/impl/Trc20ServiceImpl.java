@@ -3,8 +3,9 @@ package com.feel.modules.wallet.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.feel.common.utils.Constant;
 import com.feel.common.utils.TrxUtils;
+import com.feel.modules.wallet.entity.Coin;
+import com.feel.modules.wallet.entity.Contract;
 import com.feel.modules.wallet.entity.Recharge;
 import com.feel.modules.wallet.service.Trc20Service;
 import com.google.protobuf.Any;
@@ -28,8 +29,7 @@ import org.tron.protos.Protocol;
 import org.tron.protos.contract.BalanceContract;
 import org.tron.protos.contract.SmartContractOuterClass;
 import org.tron.walletserver.WalletApi;
-
-import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -45,11 +45,13 @@ import java.util.*;
 @Slf4j
 public class Trc20ServiceImpl implements Trc20Service{
 
+
+
     private static String privateKey;
 
     private static String trxAddress;
 
-    private static String http = Constant.tronUrl;
+//    private static String http = Constant.tronUrl;
 
     private static String walletSolidityHttp;
 
@@ -61,15 +63,17 @@ public class Trc20ServiceImpl implements Trc20Service{
 
     private static Long fee;
 
-
-    private static Map<String, String> contractMap;
-
-    private static Map<String, Integer> weiMap;
+    
 
     private BigInteger currentBlock = BigInteger.ZERO;
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private Coin coin;
+    @Autowired
+    private Contract contract;
 
 
 
@@ -80,7 +84,7 @@ public class Trc20ServiceImpl implements Trc20Service{
      **/
     @Override
     public String createNewAddress(String accountName) {
-//        String url = Constant.tronUrl + "/wallet/generateaddress";
+//        String url = coin.getRpc() + "/wallet/generateaddress";
         SignInterface sign = SignUtils.getGeneratedRandomSign(Utils.getRandom(), true);
         byte[] priKey = sign.getPrivateKey();
         byte[] address = sign.getAddress();
@@ -110,7 +114,8 @@ public class Trc20ServiceImpl implements Trc20Service{
      * @return
      */
     public  String createAccount(String address) {
-        String url = Constant.tronUrl + "/wallet/createaccount";
+        //String url = coin.getRpc() + "/wallet/createaccount";
+        String url = coin.getRpc()+" /wallet/createaccount";
         Map<String, Object> map = new HashMap<>();
         map.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(trxAddress)));
         map.put("account_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(address)));
@@ -125,8 +130,8 @@ public class Trc20ServiceImpl implements Trc20Service{
      * @param address
      * @return
      */
-    public static String getAccount(String address) {
-        String url = Constant.tronUrl + "/wallet/getaccount";
+    public  String getAccount(String address) {
+        String url = coin.getRpc() + "/wallet/getaccount";
         Map<String, Object> map = new HashMap<>();
         map.put("address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(address)));
         String param = JSON.toJSONString(map);
@@ -140,8 +145,8 @@ public class Trc20ServiceImpl implements Trc20Service{
      * @param address 地址
      * @return
      */
-    public static String getTrc20Account(String contractAddress, String address) {
-        String url = Constant.tronUrl + "/wallet/triggerconstantcontract";
+    public  String getTrc20Account(String contractAddress, String address) {
+        String url = coin.getRpc() + "/wallet/triggerconstantcontract";
         Map<String, Object> map = new HashMap<>();
         address = TrxUtils.addZeroForNum(ByteArray.toHexString(WalletApi.decodeFromBase58Check(address)), 64);
         map.put("contract_address", contractAddress);
@@ -162,28 +167,28 @@ public class Trc20ServiceImpl implements Trc20Service{
      */
     public  String trc20Transaction(String contractAddress, String toAddress, BigDecimal amount) {
         //发起交易
-        String url = Constant.tronUrl + "/wallet/triggersmartcontract";
+        String url = coin.getRpc() + "/wallet/triggersmartcontract";
 
         Map<String, Object> map = new HashMap<>();
 
         String to_address = ByteArray.toHexString(WalletApi.decodeFromBase58Check(toAddress));
         to_address = TrxUtils.addZeroForNum(to_address, 64);
         //amount = amount.multiply(new BigDecimal(1 + TrxUtils.getSeqNumByLong(0L, weiMap.get(symbol))));
-        amount = amount.multiply(Constant.decimal);
+        amount = amount.multiply(contract.getDecimal());
         String uint256 = TrxUtils.addZeroForNum(amount.toBigInteger().toString(16), 64);
 
-        map.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(trxAddress)));
-        map.put("contract_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(Constant.contract)));
+        map.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check("fromAddress")));
+        map.put("contract_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(contract.getAddress())));
         map.put("function_selector", "transfer(address,uint256)");
         map.put("parameter", to_address + uint256);
         map.put("call_value", 0);
-        map.put("fee_limit", fee);
+        map.put("fee_limit", coin.getGasLimit());
 
         String param = JSON.toJSONString(map);
 
         ResponseEntity<String> stringResponseEntity = postForEntity(url, param);
 
-        return signAndBroadcast(JSON.parseObject(stringResponseEntity.getBody()).getString("transaction"), privateKey);
+        return signAndBroadcast(JSON.parseObject(stringResponseEntity.getBody()).getString("transaction"), "privateKey");
     }
 
 
@@ -198,31 +203,31 @@ public class Trc20ServiceImpl implements Trc20Service{
      * @param amount      数量
      * @return
      */
-    private static String trc20Transaction(String symbol, String fromAddress, String privateKey, String toAddress, BigDecimal amount) {
+    private  String trc20Transaction(String symbol, String fromAddress, String privateKey, String toAddress, BigDecimal amount) {
         //发起交易
-        String url = Constant.tronUrl + "/wallet/triggersmartcontract";
+        String url =coin.getRpc() + "/wallet/triggersmartcontract";
 
         Map<String, Object> map = new HashMap<>();
 
         String to_address = ByteArray.toHexString(WalletApi.decodeFromBase58Check(toAddress));
         to_address = TrxUtils.addZeroForNum(to_address, 64);
-        amount = amount.multiply(new BigDecimal(1 + TrxUtils.getSeqNumByLong(0L, weiMap.get(symbol))));
+        amount = amount.multiply(contract.getDecimal());
         String uint256 = TrxUtils.addZeroForNum(amount.toBigInteger().toString(16), 64);
 
         map.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(fromAddress)));
        // map.put("contract_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(symbolMap.get(symbol))));
-        map.put("contract_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(Constant.contract)));
+        map.put("contract_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check( contract.getAddress())));
         map.put("function_selector", "transfer(address,uint256)");
         map.put("parameter", to_address + uint256);
         map.put("call_value", 0);
-        map.put("fee_limit", fee);
+        map.put("fee_limit", coin.getGasLimit());
 
         String param = JSON.toJSONString(map);
 
         ResponseEntity<String> stringResponseEntity = postForEntity(url, param);
 
         //签名
-        url = Constant.tronUrl + "/wallet/gettransactionsign";
+        url = coin.getRpc() + "/wallet/gettransactionsign";
         map = new HashMap<>();
         map.put("transaction", JSON.parseObject(stringResponseEntity.getBody()).get("transaction"));
         map.put("privateKey", privateKey);
@@ -230,7 +235,7 @@ public class Trc20ServiceImpl implements Trc20Service{
         stringResponseEntity = postForEntity(url, param);
 
         //广播
-        url = Constant.tronUrl + "/wallet/broadcasttransaction";
+        url = coin.getRpc() + "/wallet/broadcasttransaction";
         stringResponseEntity = postForEntity(url, stringResponseEntity.getBody());
 
         return stringResponseEntity.getBody();
@@ -244,10 +249,10 @@ public class Trc20ServiceImpl implements Trc20Service{
      * @param transaction 交易对象
      * @return
      */
-    private static String signAndBroadcast(String transaction, String privateKey) {
+    private  String signAndBroadcast(String transaction, String privateKey) {
 
         //签名
-        String url = Constant.tronUrl + "/wallet/gettransactionsign";
+        String url = coin.getRpc() + "/wallet/gettransactionsign";
         Map<String, Object> map = new HashMap<>();
         map.put("transaction", transaction);
         map.put("privateKey", privateKey);
@@ -255,7 +260,7 @@ public class Trc20ServiceImpl implements Trc20Service{
         ResponseEntity<String> stringResponseEntity = postForEntity(url, param);
 
         //广播
-        url = Constant.tronUrl + "/wallet/broadcasttransaction";
+        url = coin.getRpc() + "/wallet/broadcasttransaction";
         stringResponseEntity = postForEntity(url, stringResponseEntity.getBody());
 
 
@@ -271,11 +276,11 @@ public class Trc20ServiceImpl implements Trc20Service{
      */
     @Override
     public String transfer(String from, String toAddress, BigDecimal amount, BigDecimal fee) throws Exception {
-        String url = Constant.tronUrl + "/wallet/easytransferbyprivate";
+        String url = coin.getRpc() + "/wallet/easytransferbyprivate";
         Map<String, Object> map = new HashMap<>();
-        map.put("privateKey", privateKey);
+        map.put("privateKey", "privateKey");
         map.put("toAddress", ByteArray.toHexString(WalletApi.decodeFromBase58Check(toAddress)));
-        amount = amount.multiply(new BigDecimal(1 + TrxUtils.getSeqNumByLong(0L, weiMap.get("TRX"))));
+        amount = amount.multiply(contract.getDecimal());
         map.put("amount", amount.toBigInteger());
         String param = JSON.toJSONString(map);
         return postForEntity(url, param).getBody();
@@ -288,15 +293,15 @@ public class Trc20ServiceImpl implements Trc20Service{
      * @param amount    数量
      * @return
      */
-    public static String transaction(String toAddress, BigDecimal amount) {
-        String url = Constant.tronUrl + "/wallet/createtransaction";
+    public  String transaction(String toAddress, BigDecimal amount) {
+        String url = coin.getRpc() + "/wallet/createtransaction";
         Map<String, Object> map = new HashMap<>();
-        map.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(trxAddress)));
+        map.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check("trxAddress")));
         map.put("to_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(toAddress)));
-        amount = amount.multiply(new BigDecimal(1 + TrxUtils.getSeqNumByLong(0L, weiMap.get("TRX"))));
+        amount = amount.multiply(contract.getDecimal());
         map.put("amount", amount.toBigInteger());
         String param = JSON.toJSONString(map);
-        return signAndBroadcast(postForEntity(url, param).getBody(), privateKey);
+        return signAndBroadcast(postForEntity(url, param).getBody(), "privateKey");
     }
 
 
@@ -308,7 +313,7 @@ public class Trc20ServiceImpl implements Trc20Service{
      * @return
      */
     public  String getTransactionById(String txId) {
-        String url = Constant.tronUrl + "/walletsolidity/gettransactionbyid";
+        String url = coin.getRpc() + "/walletsolidity/gettransactionbyid";
         Map<String, Object> map = new HashMap<>();
         map.put("value", txId);
         String param = JSON.toJSONString(map);
@@ -321,8 +326,8 @@ public class Trc20ServiceImpl implements Trc20Service{
      * @param txId 交易id
      * @return
      */
-    public static String getTransactionInfoById(String txId) {
-        String url = Constant.tronUrl + "/wallet/gettransactioninfobyid";
+    public  String getTransactionInfoById(String txId) {
+        String url = coin.getRpc() + "/wallet/gettransactioninfobyid";
         Map<String, Object> map = new HashMap<>();
         map.put("value", txId);
         String param = JSON.toJSONString(map);
@@ -336,8 +341,8 @@ public class Trc20ServiceImpl implements Trc20Service{
      * @return
      */
     public  String getTransactionInfoByBlockNum(BigInteger num) {
-//        String url = Constant.tronUrl + "/wallet/gettransactioninfobyblocknum";
-        String url = Constant.tronUrl + "/wallet/getblockbynum";
+//        String url = coin.getRpc() + "/wallet/gettransactioninfobyblocknum";
+        String url = coin.getRpc() + "/wallet/getblockbynum";
         Map<String, Object> map = new HashMap<>();
         map.put("num", num);
         String param = JSON.toJSONString(map);
@@ -350,8 +355,8 @@ public class Trc20ServiceImpl implements Trc20Service{
      *
      * @return
      */
-    public static String getNowBlock() {
-        String url = Constant.tronUrl + "/wallet/getnowblock";
+    public  String getNowBlock() {
+        String url = coin.getRpc() + "/wallet/getnowblock";
         return getForEntity(url);
     }
 
@@ -514,13 +519,13 @@ public class Trc20ServiceImpl implements Trc20Service{
 
                     BigDecimal amount = BigDecimal.ZERO;
                     //相匹配的合约地址
-                    if (!contractMap.containsKey(contract_address)) {
-                        continue;
-                    }
+//                    if (!contractMap.containsKey(contract_address)) {
+//                        continue;
+//                    }
                     //合约币种
-                    String symbol = contractMap.get(contract_address);
+                  //  String symbol = contractMap.get(contract_address);
                     if (StringUtils.isNotEmpty(amountStr)) {
-                        amount = new BigDecimal(amountStr).divide(new BigDecimal(1 + TrxUtils.getSeqNumByLong(0L, weiMap.get(symbol))));
+                        amount = new BigDecimal(amountStr).divide(contract.getDecimal());
                     }
                     for (String address : addressList) {
                         if (address.equals(to_address)) {
@@ -535,7 +540,7 @@ public class Trc20ServiceImpl implements Trc20Service{
                     String owner_address = WalletApi.encode58Check(ByteArray.fromHexString(ByteArray.toHexString(deployContract.getOwnerAddress().toByteArray())));
                     String to_address = WalletApi.encode58Check(ByteArray.fromHexString(ByteArray.toHexString(deployContract.getToAddress().toByteArray())));
                     BigDecimal amount = new BigDecimal(deployContract.getAmount());
-                    amount = amount.divide(new BigDecimal(1 + TrxUtils.getSeqNumByLong(0L, weiMap.get("TRX"))));
+                    amount = amount.divide(contract.getDecimal());
 
                 }
             }
@@ -557,7 +562,7 @@ public class Trc20ServiceImpl implements Trc20Service{
         String to_address = parseObject.getJSONObject("raw_data").getJSONArray("contract").getJSONObject(0).getJSONObject("parameter").getJSONObject("value").getString("to_address");
         to_address = WalletApi.encode58Check(ByteArray.fromHexString(to_address));
 
-        amount = amount.divide(new BigDecimal(1 + TrxUtils.getSeqNumByLong(0L, weiMap.get("TRX"))));
+        amount = amount.divide(contract.getDecimal());
 
 
     }
@@ -596,7 +601,7 @@ public class Trc20ServiceImpl implements Trc20Service{
 
         BigDecimal amount = BigDecimal.ZERO;
         //相匹配的合约地址
-        if (!Constant.contract.equals(contract_address)) {
+        if (! contract.getAddress().equals(contract_address)) {
             return null;
         }
 
@@ -604,7 +609,7 @@ public class Trc20ServiceImpl implements Trc20Service{
        // String symbol = contractMap.get(contract_address);
         if (StringUtils.isNotEmpty(amountStr)) {
            // amount = new BigDecimal(amountStr).divide(new BigDecimal(1 + TrxUtils.getSeqNumByLong(0L, weiMap.get(symbol))));
-            amount = new BigDecimal(amountStr).divide(Constant.decimal);
+            amount = new BigDecimal(amountStr).divide(contract.getDecimal());
         }
 
         for (String address : addressList) {
@@ -671,7 +676,7 @@ public class Trc20ServiceImpl implements Trc20Service{
                     }
 
                     String amountStr = new BigInteger(data, 16).toString();
-                    BigDecimal amount = new BigDecimal(amountStr).divide(new BigDecimal(1 + TrxUtils.getSeqNumByLong(0L, weiMap.get(symbol))));
+                    BigDecimal amount = new BigDecimal(amountStr).divide(contract.getDecimal());
 
                     if (amount.compareTo(BigDecimal.ONE) < 0) {
                         continue;
@@ -682,7 +687,7 @@ public class Trc20ServiceImpl implements Trc20Service{
                     BigDecimal balance = BigDecimal.ZERO;
 
                     if (StringUtils.isNotEmpty(accountBalance)) {
-                        balance = new BigDecimal(accountBalance).divide(new BigDecimal(1 + TrxUtils.getSeqNumByLong(0L, weiMap.get("TRX"))));
+                        balance = new BigDecimal(accountBalance).divide(contract.getDecimal());
                     }
 
                     if (balance.compareTo(new BigDecimal("0.5")) < 0) {
@@ -712,14 +717,14 @@ public class Trc20ServiceImpl implements Trc20Service{
 
     @Override
     public BigDecimal getTrcBalance(String address) throws IOException {
-        String result = getTrc20Account(Constant.contract,address);
+        String result = getTrc20Account( contract.getAddress(),address);
         BigDecimal amount = BigDecimal.ZERO;
         if(StringUtils.isNotEmpty(result)){
             JSONObject obj = JSONObject.parseObject(result);
             JSONArray results = obj.getJSONArray("constant_result");
             if(results != null && results.size() > 0){
                 BigInteger _amount = new BigInteger(results.getString(0),16);
-                amount = new BigDecimal(_amount).divide(Constant.decimal,6, RoundingMode.FLOOR);
+                amount = new BigDecimal(_amount).divide(contract.getDecimal(),6, RoundingMode.FLOOR);
             }
         }
         log.info(String.format("账号%s的balance=%s",address,amount.toString()));
@@ -738,7 +743,7 @@ public class Trc20ServiceImpl implements Trc20Service{
                 balance = b;
             }
         }
-        return new BigDecimal(balance).divide(Constant.decimal,6, RoundingMode.FLOOR);
+        return new BigDecimal(balance).divide(contract.getDecimal(),6, RoundingMode.FLOOR);
     }
 
 

@@ -5,8 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
@@ -23,6 +25,8 @@ public class Contract {
 
     @ApiModelProperty(name = "decimals" , value = "合约精度")
     private String decimals;
+    @ApiModelProperty(name = "decimal" , value = "合约精度")
+    private BigDecimal decimal;
 
     @ApiModelProperty(name = "address" , value = "合约地址")
     private String address;
