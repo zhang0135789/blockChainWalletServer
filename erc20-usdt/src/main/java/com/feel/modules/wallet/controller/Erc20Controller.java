@@ -100,4 +100,11 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     }
 
 
+    @GetMapping("/withdrawTransfer")
+    @Override
+    R withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
+        return null;
+    }
+
+
 }
