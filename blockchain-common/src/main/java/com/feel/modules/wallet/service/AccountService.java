@@ -138,6 +138,8 @@ public interface AccountService {
      */
     long updateBalance(String address, BigDecimal balance);
 
+    void updateStatus(String address, Integer status);
+
     /**
      * 更新账户gas量
      * @param address

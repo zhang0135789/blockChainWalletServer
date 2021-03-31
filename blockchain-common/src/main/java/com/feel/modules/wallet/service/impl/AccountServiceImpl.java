@@ -268,6 +268,22 @@ public class AccountServiceImpl implements AccountService {
     }
 
     /**
+    * @Description: 更新地址状态
+    * @Param:
+    * @return:
+    * @Author: lhp
+    * @Date: 2021-03-31 21:03
+    **/
+    @Override
+    public void updateStatus(String address, Integer status) {
+        Query query = new Query();
+        Criteria criteria = Criteria.where("address").is(address);
+        query.addCriteria(criteria);
+        Update update = Update.update("status",1);
+        mongoTemplate.updateFirst(query, update, getCollectionName());
+    }
+
+    /**
      * 更新余额
      * @param address
      * @param balance

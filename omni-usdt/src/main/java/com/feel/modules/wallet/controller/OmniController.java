@@ -99,5 +99,10 @@ public class OmniController extends WalletController<OmniService>{
         return R.ok(txid);
     }
 
+    @Override
+    R withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
+        return null;
+    }
+
 
 }

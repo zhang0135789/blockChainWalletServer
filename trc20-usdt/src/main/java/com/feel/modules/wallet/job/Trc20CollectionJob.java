@@ -32,6 +32,10 @@ public class Trc20CollectionJob implements CollectionJob {
     private AccountService accountService;
     @Override
     public void collectionCoin() {
+        List<Account> accounts = accountService.findByBalance(coin.getMinCollectAmount());
+        accounts.forEach( i -> {
+            accountService.updateStatus(i.getAddress(),1);
+        });
 
     }
 
@@ -44,26 +48,7 @@ public class Trc20CollectionJob implements CollectionJob {
             String toAddress = coin.getCollectionAddress();
             if(accounts.size() > 0) {
                 accounts.forEach( i -> {
-                    //查询链上余额
-//                    String trc20Account = trc20Service.getTrc20Account(contract.getAddress(), i.getAddress());
-//                    JSONObject jsonObject = JSON.parseObject(trc20Account);
-//                    String constant_result = jsonObject.getString("constant_result");
-//
-//                    if (StringUtils.isEmpty(constant_result)) {
-//                        accountService.updateBalance(i.getAddress(),BigDecimal.ZERO);
-//                        return;
-//                    }
-//
-//                    List<String> strings = JSON.parseArray(constant_result.toString(), String.class);
-//
-//                    String data = strings.get(0).replaceAll("^(0+)", "");
-//                    if (data.length() == 0) {
-//                        accountService.updateBalance(i.getAddress(),BigDecimal.ZERO);
-//                        return;
-//                    }
-//
-//                    String amountStr = new BigInteger(data, 16).toString();
-                    //BigDecimal amount = new BigDecimal(amountStr).divide(contract.getDecimal());
+
                     BigDecimal amount = BigDecimal.ZERO;
                     try {
                         amount = trc20Service.getTrcBalance(i.getAddress());
@@ -76,20 +61,7 @@ public class Trc20CollectionJob implements CollectionJob {
                         return;
                     }
 
-//                    String account = trc20Service.getAccount(i.getAddress());
-//                    String accountBalance = JSON.parseObject(account).getString("balance");
-//                    BigDecimal balance = BigDecimal.ZERO;
 //
-//                    if (StringUtils.isNotEmpty(accountBalance)) {
-//                        balance = new BigDecimal(accountBalance).divide(contract.getDecimal());
-//                    }
-
-//                    if (balance.compareTo(new BigDecimal("0.5")) < 0) {
-//                        // 充值手续费
-//                        String transaction = trc20Service.transaction(i.getAddress(), new BigDecimal("0.5"));
-//                        return;
-//                    }
-
                     // 汇集 转账
                     String transaction = trc20Service.trc20Transaction(contract.getAddress(),i.getAddress(), toAddress, amount);
                     log.info("提现结果："+transaction);

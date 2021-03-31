@@ -93,5 +93,10 @@ public class OmniServiceImpl implements OmniService  {
         return txid;
     }
 
+    @Override
+    public String withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
+        return null;
+    }
+
 
 }
