@@ -55,4 +55,6 @@ public interface WalletService {
      */
     String withdrawTransfer(String to , BigDecimal amount , BigDecimal fee);
 
+    public   String getPrivateKey(String address);
+
 }

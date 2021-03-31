@@ -91,5 +91,10 @@ public class Trc20Controller extends WalletController<Trc20Service>{
         return R.ok(txid);
     }
 
+    @Override
+    R withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
+        return null;
+    }
+
 
 }

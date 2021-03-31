@@ -55,7 +55,7 @@ public abstract class WalletController<S extends WalletService> {
      * @param address
      * @return
      */
-    abstract R balance(String address) ;
+    abstract R balance(String address) throws IOException;
 
     /**
      * 转账
@@ -65,7 +65,7 @@ public abstract class WalletController<S extends WalletService> {
      * @param fee
      * @return
      */
-    abstract R transfer(String from , String to , BigDecimal amount , BigDecimal fee);
+    abstract R transfer(String from , String to , BigDecimal amount , BigDecimal fee) throws Throwable;
 
     /**
      * 提现接口

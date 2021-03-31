@@ -3,8 +3,11 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
+import com.feel.modules.wallet.entity.Account;
+import com.feel.modules.wallet.service.AccountService;
 import org.apache.commons.codec.binary.Base64;
 
+import javax.annotation.Resource;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -22,6 +25,7 @@ import java.util.List;
 public class TrxUtils {
     private static final String KEY_ALGORITHM = "AES";
     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
+
 
     /**
      * 长度不够前面补0
@@ -274,6 +278,9 @@ public class TrxUtils {
         // 转换为AES专用密钥
         return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
     }
+
+
+
 
 }
 
