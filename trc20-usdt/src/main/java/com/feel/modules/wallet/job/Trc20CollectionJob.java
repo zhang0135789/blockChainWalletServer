@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -44,25 +45,31 @@ public class Trc20CollectionJob implements CollectionJob {
             if(accounts.size() > 0) {
                 accounts.forEach( i -> {
                     //查询链上余额
-                    String trc20Account = trc20Service.getTrc20Account(contract.getAddress(), i.getAddress());
-                    JSONObject jsonObject = JSON.parseObject(trc20Account);
-                    String constant_result = jsonObject.getString("constant_result");
-
-                    if (StringUtils.isEmpty(constant_result)) {
-                        accountService.updateBalance(i.getAddress(),BigDecimal.ZERO);
-                        return;
+//                    String trc20Account = trc20Service.getTrc20Account(contract.getAddress(), i.getAddress());
+//                    JSONObject jsonObject = JSON.parseObject(trc20Account);
+//                    String constant_result = jsonObject.getString("constant_result");
+//
+//                    if (StringUtils.isEmpty(constant_result)) {
+//                        accountService.updateBalance(i.getAddress(),BigDecimal.ZERO);
+//                        return;
+//                    }
+//
+//                    List<String> strings = JSON.parseArray(constant_result.toString(), String.class);
+//
+//                    String data = strings.get(0).replaceAll("^(0+)", "");
+//                    if (data.length() == 0) {
+//                        accountService.updateBalance(i.getAddress(),BigDecimal.ZERO);
+//                        return;
+//                    }
+//
+//                    String amountStr = new BigInteger(data, 16).toString();
+                    //BigDecimal amount = new BigDecimal(amountStr).divide(contract.getDecimal());
+                    BigDecimal amount = BigDecimal.ZERO;
+                    try {
+                        amount = trc20Service.getTrcBalance(i.getAddress());
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-
-                    List<String> strings = JSON.parseArray(constant_result.toString(), String.class);
-
-                    String data = strings.get(0).replaceAll("^(0+)", "");
-                    if (data.length() == 0) {
-                        accountService.updateBalance(i.getAddress(),BigDecimal.ZERO);
-                        return;
-                    }
-
-                    String amountStr = new BigInteger(data, 16).toString();
-                    BigDecimal amount = new BigDecimal(amountStr).divide(contract.getDecimal());
 
                     if (amount.compareTo(BigDecimal.ONE) < 0) {
                         accountService.updateBalance(i.getAddress(),BigDecimal.ZERO);
