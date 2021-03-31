@@ -25,6 +25,7 @@ public class Contract {
 
     @ApiModelProperty(name = "decimals" , value = "合约精度")
     private String decimals;
+
     @ApiModelProperty(name = "decimal" , value = "合约精度")
     private BigDecimal decimal;
 

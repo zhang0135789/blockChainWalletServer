@@ -2,7 +2,7 @@ package com.feel.modules.wallet.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.feel.common.utils.EtherApiUtils;
-import com.feel.modules.wallet.entiry.Payment;
+import com.feel.modules.wallet.entity.Payment;
 import com.feel.modules.wallet.entity.Account;
 import com.feel.modules.wallet.entity.Coin;
 import com.feel.modules.wallet.entity.Contract;

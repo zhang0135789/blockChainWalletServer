@@ -65,7 +65,7 @@ coin:
 
 # 合约配置
 contract:
-  #erc20-usdt合约地址
+  #erc20-usdt合约地址 0xdac17f958d2ee523a2206206994597c13d831ec7
   address: 0xdac17f958d2ee523a2206206994597c13d831ec7
   #合约单位
   #wei:0,kwei:3,wwei:4,mwei:6,gwei:9,szabo:12,finney:15,ether:18,kether:21,mether:24,gether:27

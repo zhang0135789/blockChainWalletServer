@@ -1,4 +1,4 @@
-package com.feel.modules.wallet.entiry;
+package com.feel.modules.wallet.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

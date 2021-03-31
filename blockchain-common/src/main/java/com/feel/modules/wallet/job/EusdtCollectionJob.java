@@ -2,11 +2,8 @@ package com.feel.modules.wallet.job;
 
 
 
-import com.feel.modules.wallet.entity.Account;
-import com.feel.modules.wallet.entity.Contract;
 import com.feel.modules.wallet.service.AccountCollectionService;
 import com.feel.modules.wallet.service.AccountService;
-import com.feel.modules.wallet.service.Erc20Service;
 import com.feel.modules.wallet.utils.AccountCollection;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 
 
 /**
