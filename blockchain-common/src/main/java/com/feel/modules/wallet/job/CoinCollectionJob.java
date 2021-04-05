@@ -15,14 +15,14 @@ import org.springframework.stereotype.Component;
 
 /**
  * @Author: zz
- * @Description:
+ * @Description: 归集定时任务
  * @Date: 3:50 PM 3/28/21
  * @Modified By
  */
 @Component
 @PropertySource(value = "classpath:/application.yml")
 @Slf4j
-public class EusdtCollectionJob implements CollectionJob {
+public class CoinCollectionJob implements CollectionJob {
 
     @Autowired
     private AccountService accountService;
