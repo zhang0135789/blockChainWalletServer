@@ -96,7 +96,6 @@ public class Trc20Controller extends WalletController<Trc20Service>{
 
     @Override
     R withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
-        String fromAddress = coin.getWithdrawAddress();
         String txid = "";
         try{
             txid = walletService.withdrawTransfer(to,amount,fee);

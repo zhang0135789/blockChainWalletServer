@@ -87,12 +87,4 @@ public interface Trc20Service extends WalletService{
      */
     public  String getAccount(String address);
 
-    /**
-     * 创建trx交易信息
-     * @param fromAddress
-     * @param toAddress
-     * @param amount
-     * @return
-     */
-    public  String transaction(String fromAddress,String toAddress, BigDecimal amount);
 }
