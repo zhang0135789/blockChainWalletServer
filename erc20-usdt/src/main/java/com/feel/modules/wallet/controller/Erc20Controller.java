@@ -74,7 +74,7 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     public R<BigDecimal> balance(String address) {
         BigDecimal balance = null;
         try {
-            balance = walletService.getBalance(address);
+            balance = walletService.getTokenBalance(address);
         } catch (Exception e) {
             log.error("获取地址总资产失败",e);
             return R.error("获取地址总资产失败");
@@ -88,7 +88,7 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     public R<String> transfer(String from, String to, BigDecimal amount, BigDecimal fee) {
         String txid = null;
         try {
-            txid = walletService.transfer(from,to,amount,fee);
+            txid = walletService.transferToken(from,to,amount,fee);
         } catch (RuntimeException e) {
             log.error("转账失败",e);
             return R.error("转账失败");

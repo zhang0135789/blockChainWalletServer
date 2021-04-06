@@ -96,12 +96,24 @@ public class Erc20ServiceImpl implements Erc20Service {
     }
 
     /**
-     * 获取erc20-usdt 地址总资产
+     * 获取地址总资产-eth
      * @param address
      * @return
      */
     @Override
-    public BigDecimal getBalance(String address) {
+    public BigDecimal getBalance(String address) throws IOException {
+        EthGetBalance getBalance = web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).send();
+        return Convert.fromWei(getBalance.getBalance().toString(), Convert.Unit.ETHER);
+    }
+
+    /**
+     * 获取地址总资产-usdt
+     * @param address
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public BigDecimal getTokenBalance(String address) throws Exception {
         BigInteger balance = BigInteger.ZERO;
         Function fn = new Function(
                 "balanceOf",
@@ -133,7 +145,7 @@ public class Erc20ServiceImpl implements Erc20Service {
     }
 
     /**
-     * 交易 erc20-usdt
+     * 交易 eth
      * @param from
      * @param to
      * @param amount
@@ -142,11 +154,24 @@ public class Erc20ServiceImpl implements Erc20Service {
      */
     @Override
     public String transfer(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception {
+        return transferEth(coin.getKeystorePath() + "/" + coin.getWithdrawWallet(), coin.getWithdrawWalletPassword(), to, amount, true,"");
+    }
+
+    /**
+     * 交易 erc20-usdt
+     * @param from
+     * @param to
+     * @param amount
+     * @param fee
+     * @return
+     */
+    @Override
+    public String transferToken(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception {
         log.info("transfer From Address:from={},to={},amount={},fee={}",from,to, amount, fee);
         if (fee == null || fee.compareTo(BigDecimal.ZERO) <= 0) {
             fee = getMinerFee(contract.getGasLimit());
         }
-        if(getEthBalance(from).compareTo(fee) < 0){
+        if(getBalance(from).compareTo(fee) < 0){
             log.info("地址[{}]手续费不足，最低为[{}ETH]",from,fee);
             throw new RuntimeException("手续费不足");
         }
@@ -158,7 +183,7 @@ public class Erc20ServiceImpl implements Erc20Service {
     }
 
     /**
-     * 提现
+     * 提现 -usdt
      * @param to
      * @param amount
      * @param fee
@@ -166,7 +191,6 @@ public class Erc20ServiceImpl implements Erc20Service {
      */
     @Override
     public String withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
-
         return transferToken(coin.getWithdrawAddress(), to, amount, true);
     }
 
@@ -259,17 +283,6 @@ public class Erc20ServiceImpl implements Erc20Service {
     }
 
 
-    /**
-     * 获取账户以太坊金额
-     * @param address
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public BigDecimal getEthBalance(String address) throws Exception {
-        EthGetBalance getBalance = web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).send();
-        return Convert.fromWei(getBalance.getBalance().toString(), Convert.Unit.ETHER);
-    }
 
     /**
      * 发送eth
@@ -279,8 +292,7 @@ public class Erc20ServiceImpl implements Erc20Service {
      * @param withdrawId
      * @return
      */
-    @Override
-    public String transferFromEthWithdrawWallet(String toAddress, BigDecimal amount, boolean sync, String withdrawId) {
+    private String transferFromEthWithdrawWallet(String toAddress, BigDecimal amount, boolean sync, String withdrawId) {
         return transferEth(coin.getKeystorePath() + "/" + coin.getWithdrawWallet(), coin.getWithdrawWalletPassword(), toAddress, amount, sync,withdrawId);
     }
 

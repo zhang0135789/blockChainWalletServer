@@ -45,16 +45,16 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
     public void checkAccount(Account account) {
         try {
             BigDecimal minerFee = erc20Service.getMinerFee(contract.getGasLimit());
-            BigDecimal ethBalance = erc20Service.getEthBalance(account.getAddress());
-            BigDecimal tokenBalance = erc20Service.getBalance(account.getAddress());
+            BigDecimal ethBalance = erc20Service.getBalance(account.getAddress());
+            BigDecimal tokenBalance = erc20Service.getTokenBalance(account.getAddress());
             //给满足条件的地址充矿工费，条件1：eth额度小于minerFee,条件2:balance大于等于minCollectAmount
             if (ethBalance.compareTo(minerFee) < 0
                     && tokenBalance.compareTo(coin.getMinCollectAmount()) >= 0) {
                 log.info("======>process account:{}", account);
                 //计算本次要转的矿工费
                 BigDecimal feeAmt = minerFee.subtract(ethBalance);
-
-                String hash = erc20Service.transferFromEthWithdrawWallet(account.getAddress(), feeAmt, true, "");
+                //发送旷工费
+                String hash = erc20Service.transfer("",account.getAddress(), feeAmt , null);
                 log.info("======>transfer fee {},result:{}", feeAmt, hash);
                 if(ObjectUtil.isNotNull(hash)){
                     ethBalance = minerFee;
@@ -77,8 +77,8 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
         try {
             String collectionAddress = coin.getCollectionAddress();
             BigDecimal minerFee = erc20Service.getMinerFee(contract.getGasLimit());
-            BigDecimal tokenBalance = erc20Service.getBalance(account.getAddress());
-            String hash = erc20Service.transfer(account.getAddress(), collectionAddress, tokenBalance, minerFee);
+            BigDecimal tokenBalance = erc20Service.getTokenBalance(account.getAddress());
+            String hash = erc20Service.transferToken(account.getAddress(), collectionAddress, tokenBalance, minerFee);
             log.info("collection success : from[{}],to[{}],amount[{}],hash[{}]",account.getAddress(),coin.getMasterAddress(),tokenBalance,minerFee);
             //TODO 归集记录
             CollectionTran collectionTran = new CollectionTran();

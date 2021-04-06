@@ -67,19 +67,32 @@ public class OmniServiceImpl implements OmniService  {
     }
 
     /**
-     * 获取Omni地址总资产
+     * 获取地址总资产-btc
      * @param address
      * @return
      */
     @Override
     public BigDecimal getBalance(String address) {
+        BigDecimal balance = BigDecimal.valueOf(bitcoinClient.getAddressBalance(address).getBalance());
+        log.info("omni balance : address[{}],balance[{}]" , address , balance);
+        return balance;
+    }
+
+    /**
+     * 获取地址总资产-usdt
+     * @param address
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public BigDecimal getTokenBalance(String address) throws Exception {
         BigDecimal balance = bitcoinClient.getOmniBalance(address);
         log.info("omni balance : address[{}],balance[{}]" , address , balance);
         return balance;
     }
 
     /**
-     * 交易
+     * 交易-btc
      * @param from
      * @param to
      * @param amount
@@ -88,13 +101,37 @@ public class OmniServiceImpl implements OmniService  {
      */
     @Override
     public String transfer(String from, String to, BigDecimal amount, BigDecimal fee) {
+        String txid = bitcoinClient.sendFrom(from , to , amount);
+        log.info("omni transfer : txid[{}]" , txid);
+        return txid;
+    }
+
+    /**
+     * 交易- usdt
+     * @param from
+     * @param to
+     * @param amount
+     * @param fee
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String transferToken(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception {
         String txid = bitcoinClient.omniSend(from , to , amount);
         log.info("omni transfer : txid[{}]" , txid);
         return txid;
     }
 
+    /**
+     * 提现
+     * @param to
+     * @param amount
+     * @param fee
+     * @return
+     */
     @Override
     public String withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
+        //TODO 提现
         return null;
     }
 

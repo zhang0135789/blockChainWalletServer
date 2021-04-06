@@ -18,7 +18,6 @@ public interface Trc20Service extends WalletService{
 
 
 
-
     /**
      * 获取数据库,trc地址当前余额
      * @param address
@@ -38,16 +37,6 @@ public interface Trc20Service extends WalletService{
     public String trc20Transaction(String contractAddress,String fromAddress, String toAddress, BigDecimal amount);
 
 
-
-    /**
-     * 交易
-     * @param from
-     * @param to
-     * @param amount
-     * @param fee
-     * @return
-     */
-    public String transfer(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception;
 
     /**
      * 根据区块高度，获取区块交易详情

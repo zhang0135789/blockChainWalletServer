@@ -25,14 +25,21 @@ public interface WalletService {
     Long height();
 
     /**
-     * 获取地址总资产
+     * 获取地址总资产-主币
      * @param address
      * @return
      */
     BigDecimal getBalance(String address) throws Exception;
 
     /**
-     * 交易
+     * 获取地址总资产-代币
+     * @param address
+     * @return
+     */
+    BigDecimal getTokenBalance(String address) throws Exception;
+
+    /**
+     * 交易-主币
      * @param from
      * @param to
      * @param amount
@@ -40,6 +47,17 @@ public interface WalletService {
      * @return
      */
     String transfer(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception;
+
+    /**
+     * 交易-代币
+     * @param from
+     * @param to
+     * @param amount
+     * @param fee
+     * @return
+     */
+    String transferToken(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception;
+
 
 
     /**

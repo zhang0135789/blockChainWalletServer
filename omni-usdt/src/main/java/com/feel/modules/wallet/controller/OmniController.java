@@ -77,7 +77,7 @@ public class OmniController extends WalletController<OmniService>{
     public R<BigDecimal> balance(String address) {
         BigDecimal balance = null;
         try {
-            balance = walletService.getBalance(address);
+            balance = walletService.getTokenBalance(address);
         } catch (Exception e) {
             log.error("获取地址资产失败",e);
             return R.error("获取地址资产失败");
@@ -91,7 +91,7 @@ public class OmniController extends WalletController<OmniService>{
     public R<String> transfer(String from, String to, BigDecimal amount, BigDecimal fee) {
         String txid = null;
         try {
-            txid = walletService.transfer(from,to,amount,fee);
+            txid = walletService.transferToken(from,to,amount,fee);
         } catch (Exception e) {
             log.error("交易失败",e);
             return R.error("交易失败");
@@ -99,9 +99,12 @@ public class OmniController extends WalletController<OmniService>{
         return R.ok(txid);
     }
 
+    @GetMapping("/withdraw")
+    @ApiOperation("提现")
     @Override
-    R withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
-        return null;
+    public R withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
+        String txid = walletService.withdrawTransfer(to, amount, fee);
+        return R.ok(txid);
     }
 
 

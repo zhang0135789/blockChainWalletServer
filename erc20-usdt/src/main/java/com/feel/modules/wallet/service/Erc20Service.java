@@ -20,8 +20,4 @@ public interface Erc20Service extends WalletService{
     BigDecimal getMinerFee(BigInteger gasLimit) throws Exception;
 
 
-    BigDecimal getEthBalance(String address) throws Exception;
-
-    String transferFromEthWithdrawWallet(String address, BigDecimal feeAmt, boolean sync, String password);
-
 }
