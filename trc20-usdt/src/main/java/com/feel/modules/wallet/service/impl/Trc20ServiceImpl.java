@@ -4,12 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.feel.common.utils.TrxUtils;
-import com.feel.modules.wallet.entity.Coin;
-import com.feel.modules.wallet.entity.Contract;
-import com.feel.modules.wallet.entity.Account;
-import com.feel.modules.wallet.entity.Recharge;
+import com.feel.modules.wallet.entity.*;
 import com.feel.modules.wallet.service.AccountService;
 import com.feel.modules.wallet.service.Trc20Service;
+import com.feel.modules.wallet.service.WithdrawService;
 import com.google.protobuf.Any;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Hex;
@@ -33,6 +31,7 @@ import org.tron.protos.contract.SmartContractOuterClass;
 import org.tron.walletserver.WalletApi;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -48,17 +47,14 @@ import java.util.*;
 @Slf4j
 public class Trc20ServiceImpl implements Trc20Service{
 
-
-
-
     @Autowired
     private Coin coin;
     @Autowired
     private Contract contract;
-
-
-    @Autowired
+    @Resource
     private AccountService accountService;
+    @Resource
+    private WithdrawService withdrawService;
 
 
 
@@ -219,13 +215,22 @@ public class Trc20ServiceImpl implements Trc20Service{
     @Override
     public String withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
         String from  = coin.getWithdrawAddress();
-        String res = "";
+        String txid = "";
         try{
-            res = this.transferToken(from,to,amount,BigDecimal.ZERO);;
+            txid = this.transferToken(from,to,amount,BigDecimal.ZERO);
         }catch (Exception e){
             log.error(e.toString());
+            return null;
         }
-        return res;
+        Withdraw withdraw = Withdraw.builder()
+                .fromAddress(from)
+                .toAddress(to)
+                .time(new Date())
+                .txid(txid)
+                .amount(amount)
+                .build();
+        withdrawService.save(withdraw);
+        return txid;
 
     }
 
