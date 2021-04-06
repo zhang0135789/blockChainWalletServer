@@ -107,6 +107,7 @@ public class Erc20Controller extends WalletController<Erc20Service>{
         String txid = null;
         try {
             txid = walletService.withdrawTransfer(to,amount,fee);
+
         } catch (Exception e) {
             log.error("转账失败",e);
             return R.error("转账失败");
