@@ -99,7 +99,7 @@ public class Trc20Controller extends WalletController<Trc20Service>{
         String fromAddress = coin.getWithdrawAddress();
         String txid = "";
         try{
-            txid = walletService.transfer(fromAddress,to,amount,fee);
+            txid = walletService.withdrawTransfer(to,amount,fee);
         }catch (Exception e){
             return R.error();
         }

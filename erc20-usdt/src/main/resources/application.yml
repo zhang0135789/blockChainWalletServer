@@ -37,8 +37,8 @@ swagger:
   pathMapping: /
 
 coin:
-  #节点地址
-  rpc: "http://localhost:8545/"
+  #节点地址  http://localhost:8545/
+  rpc: "http://43.128.34.237:8485"
   #token名称
   name: USDT
   #单位

@@ -15,6 +15,13 @@
 
 
     <dependencies>
+        <!-- test-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!--引入比特币相关依赖-->
         <dependency>
             <groupId>com.savl.bitcoin</groupId>
