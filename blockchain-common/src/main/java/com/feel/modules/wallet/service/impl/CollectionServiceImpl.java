@@ -40,6 +40,11 @@ public class CollectionServiceImpl implements CollectionService {
         return insert;
     }
 
+    /**
+     * 归集交易是否存在, 传入txid -交易哈希
+     * @param collectionTran
+     * @return
+     */
     @Override
     public boolean exists(CollectionTran collectionTran) {
         Query query = new Query();
