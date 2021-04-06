@@ -3,6 +3,7 @@ package com.feel.modules.wallet.controller;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.feel.modules.wallet.entity.Account;
+import com.feel.modules.wallet.entity.Coin;
 import com.feel.modules.wallet.service.AccountService;
 import com.feel.modules.wallet.service.Trc20Service;
 import com.feel.modules.wallet.utils.R;
@@ -32,6 +33,8 @@ public class Trc20Controller extends WalletController<Trc20Service>{
 
     @Resource
     private AccountService accountService;
+    @Resource
+    private Coin coin;
 
 
     @Override
@@ -93,7 +96,14 @@ public class Trc20Controller extends WalletController<Trc20Service>{
 
     @Override
     R withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
-        return null;
+        String fromAddress = coin.getWithdrawAddress();
+        String txid = "";
+        try{
+            txid = walletService.transfer(fromAddress,to,amount,fee);
+        }catch (Exception e){
+            return R.error();
+        }
+        return R.ok(txid);
     }
 
 
