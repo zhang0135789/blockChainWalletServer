@@ -101,6 +101,7 @@ public class Erc20Controller extends WalletController<Erc20Service>{
 
 
     @GetMapping("/withdrawTransfer")
+    @ApiOperation("提现")
     @Override
     R withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
         String txid = null;

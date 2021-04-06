@@ -29,22 +29,13 @@ public interface Trc20Service extends WalletService{
 
     public String trc20Transaction(String contractAddress,String fromAddress, String toAddress, BigDecimal amount);
 
-
-
-    /**
-     * 交易
-     * @param from
-     * @param to
-     * @param amount
-     * @param fee
-     * @return
-     */
-    public String transfer(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception;
-
     public  String getTransactionInfoByBlockNum(BigInteger num);
+
     public  String getTransactionById(String txId);
+
     public Recharge triggerSmartContract(List<String> addressList, String txId, JSONObject parseObject);
+
     public  String getTrc20Account(String contractAddress, String address);
+
     public  String getAccount(String address);
-    public  String transaction(String fromAddress,String toAddress, BigDecimal amount);
 }
