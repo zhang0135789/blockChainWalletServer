@@ -69,7 +69,7 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
 
                     BigDecimal amount = BigDecimal.ZERO;
                     try {
-                        amount = trc20Service.getTrcBalance(account.getAddress());
+                        amount = trc20Service.getTokenBalance(account.getAddress());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -81,7 +81,7 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
 
 //
                     // 汇集 转账
-                    String transaction = trc20Service.trc20Transaction(contract.getAddress(),account.getAddress(), toAddress, amount);
+                    String transaction = trc20Service.transferToken(account.getAddress(), toAddress, amount,BigDecimal.ZERO);
                     log.info("提现结果："+transaction);
 
                     //提现成功需要，更新本地余额

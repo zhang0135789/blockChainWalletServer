@@ -18,23 +18,7 @@ public interface Trc20Service extends WalletService{
 
 
 
-    /**
-     * 获取数据库,trc地址当前余额
-     * @param address
-     * @return
-     */
-    public BigDecimal getTrcBalance(String address) throws IOException;
 
-
-    /**
-     * trc20交易
-     * @param contractAddress
-     * @param fromAddress
-     * @param toAddress
-     * @param amount
-     * @return
-     */
-    public String trc20Transaction(String contractAddress,String fromAddress, String toAddress, BigDecimal amount);
 
 
 
