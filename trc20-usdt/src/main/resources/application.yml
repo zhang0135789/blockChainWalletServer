@@ -42,7 +42,8 @@ swagger:
 coin:
   enabled: true
   #节点地址
-  rpc: https://api.trongrid.io
+#  rpc: https://api.trongrid.io
+  rpc: http://43.128.55.241:8090
   #token名称
   name: TRCUSDT
   #单位

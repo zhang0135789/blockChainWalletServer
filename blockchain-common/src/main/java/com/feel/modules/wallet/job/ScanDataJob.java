@@ -57,13 +57,13 @@ public abstract class ScanDataJob implements Runnable {
                 rechargelist.stream().forEach(recharge ->{
                     rechargeEvent.onConfirmed(recharge);
                 });
-                //记录日志
-                scanLogService.update(coin.getName(), currentBlockHeight);
+
             }else {
                 log.info("scan error~!");
                 currentBlockHeight = currentBlockHeight - 1;
             }
-
+            //记录日志
+            scanLogService.update(coin.getName(), currentBlockHeight);
         } else {
             log.info("Already last block height: {}, networkBlockHeight: {},nothing to do",currentBlockHeight, networkBlockNumber);
         }
