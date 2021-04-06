@@ -2,12 +2,10 @@ package com.feel.modules.wallet.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.feel.common.utils.EtherApiUtils;
-import com.feel.modules.wallet.entity.Payment;
-import com.feel.modules.wallet.entity.Account;
-import com.feel.modules.wallet.entity.Coin;
-import com.feel.modules.wallet.entity.Contract;
+import com.feel.modules.wallet.entity.*;
 import com.feel.modules.wallet.service.AccountService;
 import com.feel.modules.wallet.service.Erc20Service;
+import com.feel.modules.wallet.service.WithdrawService;
 import com.feel.modules.wallet.utils.EthConvert;
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +52,10 @@ public class Erc20ServiceImpl implements Erc20Service {
     private JsonRpcHttpClient jsonRpcHttpClient;
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private WithdrawService withdrawService;
+
     @Autowired(required = false)
     private EtherApiUtils etherApiUtils;
 
@@ -191,7 +193,17 @@ public class Erc20ServiceImpl implements Erc20Service {
      */
     @Override
     public String withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
-        return transferToken(coin.getWithdrawAddress(), to, amount, true);
+        log.info("提现: from[{}],to[{}],amount[{}]" , coin.getWithdrawAddress() , to , amount);
+
+        String txid = transferToken(coin.getWithdrawAddress(), to, amount, true);
+        Withdraw withdraw = Withdraw.builder()
+                .fromAddress(coin.getWithdrawAddress())
+                .toAddress(to)
+                .time(new Date())
+                .txid(txid)
+                .build();
+        withdrawService.save(withdraw);
+        return txid;
     }
 
     /**
