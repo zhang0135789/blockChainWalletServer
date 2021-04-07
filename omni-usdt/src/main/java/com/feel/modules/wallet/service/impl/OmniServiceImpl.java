@@ -48,7 +48,7 @@ public class OmniServiceImpl implements OmniService  {
                 .createDate(new Date())
                 .build();
 
-        account = accountService.saveByName(account,"BTC");
+        account = accountService.save(account);
 
         log.info("new address [{}]" , account.getAddress());
         return account;

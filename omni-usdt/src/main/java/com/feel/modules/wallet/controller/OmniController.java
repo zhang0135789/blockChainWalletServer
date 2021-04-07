@@ -34,7 +34,7 @@ public class OmniController extends WalletController<OmniService>{
     @GetMapping("/getNewAddress")
     @ApiOperation("获取新地址")
     public R<Account> getNewAddress(String accountName) {
-        Account account = accountService.findByName("BTC",accountName);
+        Account account = accountService.findByName(accountName);
         if(ObjectUtil.isNotEmpty(account)) {
             return R.ok(account.getAddress());
         }

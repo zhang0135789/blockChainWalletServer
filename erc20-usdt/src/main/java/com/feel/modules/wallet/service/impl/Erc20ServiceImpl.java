@@ -76,7 +76,7 @@ public class Erc20ServiceImpl implements Erc20Service {
                 .walletFile(fileName)
                 .createDate(new Date())
                 .build();
-        account = accountService.saveByName(account,"ETH");
+        account = accountService.save(account);
         return account;
     }
 

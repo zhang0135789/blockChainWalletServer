@@ -37,7 +37,7 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     @GetMapping("/getNewAddress")
     @ApiOperation("获取新地址")
     public R<String> getNewAddress(String accountName) {
-        Account account = accountService.findByName("ETH",accountName);
+        Account account = accountService.findByName(accountName);
         if(ObjectUtil.isNotEmpty(account)) {
             return R.ok(account.getAddress());
         }
