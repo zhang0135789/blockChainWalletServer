@@ -91,7 +91,7 @@ public class Trc20ServiceImpl implements Trc20Service{
                 .gas(BigDecimal.ZERO)
                 .status(0)
                 .build();
-        account = accountService.saveByName(account , "TRON");
+        account = accountService.save(account);
 
         return account;
     }
