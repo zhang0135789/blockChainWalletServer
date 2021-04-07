@@ -38,16 +38,17 @@ public class TrcScanDataJob extends ScanDataJob {
         if(accounts.size() > 0){
             for(Long i = startBlockNumber; i <= endBlockNumber; i ++ ){
                 String transactionInfoByBlockNum = trc20Service.getTransactionInfoByBlockNum(BigInteger.valueOf(i));
-                JSONObject jsonObject = JSONObject.parseObject(transactionInfoByBlockNum);
-//                JSONArray parseArray = JSON.parseArray(transactionInfoByBlockNum);
-                JSONArray parseArray = jsonObject.getJSONArray("transactions");
-                String blockHash = jsonObject.getString("blockID");
+//                JSONObject jsonObject = JSONObject.parseObject(transactionInfoByBlockNum);
+                JSONArray parseArray = JSON.parseArray(transactionInfoByBlockNum);
+//                JSONArray parseArray = jsonObject.getJSONArray("transactions");
+//                String blockHash = jsonObject.getString("blockID");
                 AtomicBoolean atomicBoolean = new AtomicBoolean(false);
                 if (parseArray.size() > 0) {
+                    Long finalI = i;
                     parseArray.forEach(e -> {
                         try {
-//                            String txId = JSON.parseObject(e.toString()).getString("id");
-                            String txId = JSON.parseObject(e.toString()).getString("txID");
+                            String txId = JSON.parseObject(e.toString()).getString("id");
+//                            String txId = JSON.parseObject(e.toString()).getString("txID");
                             //判断 数据库 txId 有 就不用往下继续了
 //                            if(txId.equals("15b7a100216d040df5bcebff51b217b7c749db614f787f24dfc0a448eb13ab44")){
 //                                log.info("txid------------"+txId);
@@ -79,7 +80,11 @@ public class TrcScanDataJob extends ScanDataJob {
                                     //triggerSmartContract(addressList, txId, parseObject);
                                     Recharge recharge1 = trc20Service.triggerSmartContract(addressList, txId, parseObject);
                                     if(recharge1 != null){
+                                        String res = trc20Service.getTransactionByBlockNum(finalI);
+                                        JSONObject jsonObject = JSONObject.parseObject(res);
+                                        String blockHash = jsonObject.getString("blockID");
                                         recharge1.setBlockHash(blockHash);
+                                        recharge1.setBlockHeight(finalI);
                                         recharges.add(recharge1);
                                     }
 

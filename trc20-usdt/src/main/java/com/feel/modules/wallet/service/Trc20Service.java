@@ -30,6 +30,13 @@ public interface Trc20Service extends WalletService{
     public  String getTransactionInfoByBlockNum(BigInteger num);
 
     /**
+     * 根据区块高度，获取区块交易详情
+     * @param num
+     * @return
+     */
+    public  String getTransactionByBlockNum(Long num);
+
+    /**
      * 根据交易txid获取交易详情
      * @param txId
      * @return

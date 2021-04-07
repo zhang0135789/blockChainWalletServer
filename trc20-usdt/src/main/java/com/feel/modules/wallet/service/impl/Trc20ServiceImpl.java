@@ -87,6 +87,9 @@ public class Trc20ServiceImpl implements Trc20Service{
                 .address(newAddress)
                 .walletFile(walletFile)
                 .createDate(new Date())
+                .balance(BigDecimal.ZERO)
+                .gas(BigDecimal.ZERO)
+                .status(0)
                 .build();
         account = accountService.saveByName(account , "TRON");
 
@@ -261,7 +264,8 @@ public class Trc20ServiceImpl implements Trc20Service{
      * @return
      */
     public  String getTransactionById(String txId) {
-        String url = coin.getRpc() + "/walletsolidity/gettransactionbyid";
+//        String url = coin.getRpc() + "/walletsolidity/gettransactionbyid";
+        String url = coin.getRpc() + "/wallet/gettransactionbyid";
         Map<String, Object> map = new HashMap<>();
         map.put("value", txId);
         String param = JSON.toJSONString(map);
@@ -289,6 +293,22 @@ public class Trc20ServiceImpl implements Trc20Service{
      * @return
      */
     public  String getTransactionInfoByBlockNum(BigInteger num) {
+        String url = coin.getRpc() + "/wallet/gettransactioninfobyblocknum";
+//        String url = coin.getRpc() + "/wallet/getblockbynum";
+        Map<String, Object> map = new HashMap<>();
+        map.put("num", num);
+        String param = JSON.toJSONString(map);
+        return postForEntity(url, param).getBody();
+    }
+
+
+    /**
+     * 获取特定区块的所有交易 Info 信息
+     *
+     * @param num 区块
+     * @return
+     */
+    public  String getTransactionByBlockNum(Long num) {
 //        String url = coin.getRpc() + "/wallet/gettransactioninfobyblocknum";
         String url = coin.getRpc() + "/wallet/getblockbynum";
         Map<String, Object> map = new HashMap<>();
