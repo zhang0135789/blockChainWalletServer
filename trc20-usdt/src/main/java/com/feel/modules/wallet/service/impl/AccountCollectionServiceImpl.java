@@ -47,6 +47,15 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
         try {
             List<Account> accounts = accountService.findByBalance(coin.getMinCollectAmount());
             accounts.forEach( i -> {
+                if(i.getGas().compareTo(coin.getDefaultMinerFee()) < 0){
+                    try {
+                        trc20Service.transfer(coin.getWithdrawWallet(),i.getAddress(),coin.getDefaultMinerFee(),null);
+                    }catch (Exception e){
+                        log.error(e.toString());
+                        return;
+                    }
+
+                }
                 accountService.updateStatus(i.getAddress(),1);
             });
         } catch (Exception e) {

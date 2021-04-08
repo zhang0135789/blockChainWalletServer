@@ -41,7 +41,7 @@ public class Trc20Controller extends WalletController<Trc20Service>{
     @GetMapping("/getNewAddress")
     @ApiOperation("获取新地址")
     public R<String> getNewAddress(String accountName) {
-        Account account = accountService.findByName(accountName,"TRON");
+        Account account = accountService.findByName(accountName);
         if(ObjectUtil.isNotEmpty(account)) {
             return R.ok(account);
         }

@@ -23,7 +23,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://8.129.44.191:27017/db_wallet
-#      uri: mongodb://admin:123456@43.128.23.74:27017/admin
+#      uri: mongodb://root:123456@43.128.23.74:27017/admin
       #more ip cluster
       #uri=mongodb://user:pwd@ip1:port1,ip2:port2/database
 
@@ -44,6 +44,7 @@ coin:
   enabled: true
   #节点地址
 #  rpc: https://api.trongrid.io
+#  rpc: https://api.shasta.trongrid.io
   rpc: http://43.128.55.241:8090
   #token名称
   name: TRCUSDT
@@ -56,13 +57,13 @@ coin:
   #初始化扫描块高
   init-block-height: 28836775
   # 手续费地址 提现地址
-  withdraw-address:
+  withdraw-address: TWSLfAMbzkMZhRvpYumtjz9JYR8rnLiQWV
   # 手续费钱包
-  withdraw-wallet:
+  withdraw-wallet: TWSLfAMbzkMZhRvpYumtjz9JYR8rnLiQWV
   # 归集地址
-  collection-address:
+  collection-address: TWSLfAMbzkMZhRvpYumtjz9JYR8rnLiQWV
   #默认矿工费
-  default-miner-fee: 0.0001
+  default-miner-fee: 0.5
   # 最小归集金额
   min-collect-amount: 10
 
@@ -73,11 +74,11 @@ contract:
   address: TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t
   #合约单位
   #wei:0,kwei:3,wwei:4,mwei:6,gwei:9,szabo:12,finney:15,ether:18,kether:21,mether:24,gether:27
-  decimals: mwei
+  decimals: 1000000
   #合約精度
   decimal: 1000000
   #手续费
-  gas-limit: 50000
+  gas-limit: 6000000
 
 rule:
   initBlockHeight: 28836775

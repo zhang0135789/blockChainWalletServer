@@ -3,15 +3,26 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.feel.modules.wallet.entity.Account;
 import com.feel.modules.wallet.service.AccountService;
+import com.google.protobuf.Any;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 import org.apache.commons.codec.binary.Base64;
+import org.spongycastle.util.encoders.Hex;
+import org.tron.common.crypto.ECKey;
+import org.tron.common.utils.JsonFormat;
+import org.tron.protos.Protocol;
+import org.tron.protos.contract.*;
 
 import javax.annotation.Resource;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -279,7 +290,184 @@ public class TrxUtils {
         return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);
     }
 
+    /**
+     * 报装成transaction
+     *
+     * @param strTransaction
+     * @return
+     */
+    public static Protocol.Transaction packTransaction(String strTransaction) {
+        JSONObject jsonTransaction = JSONObject.parseObject(strTransaction);
+        JSONObject rawData = jsonTransaction.getJSONObject("raw_data");
+        JSONArray contracts = new JSONArray();
+        JSONArray rawContractArray = rawData.getJSONArray("contract");
+        for (int i = 0; i < rawContractArray.size(); i++) {
+            try {
+                JSONObject contract = rawContractArray.getJSONObject(i);
+                JSONObject parameter = contract.getJSONObject("parameter");
+                String contractType = contract.getString("type");
+                Any any = null;
+                switch (contractType) {
+                    case "AccountCreateContract":
+                        AccountContract.AccountCreateContract.Builder accountCreateContractBuilder = AccountContract.AccountCreateContract
+                                .newBuilder();
+                        JsonFormat.merge(parameter.getJSONObject("value").toString(),
+                                accountCreateContractBuilder);
+                        any = Any.pack(accountCreateContractBuilder.build());
+                        break;
+                    case "TransferContract":
+                        BalanceContract.TransferContract.Builder transferContractBuilder = BalanceContract.TransferContract.newBuilder();
+                        JsonFormat
+                                .merge(parameter.getJSONObject("value").toString(), transferContractBuilder);
+                        any = Any.pack(transferContractBuilder.build());
+                        break;
+                    case "TransferAssetContract":
+                        AssetIssueContractOuterClass.TransferAssetContract.Builder transferAssetContractBuilder = AssetIssueContractOuterClass.TransferAssetContract
+                                .newBuilder();
+                        JsonFormat.merge(parameter.getJSONObject("value").toString(),
+                                transferAssetContractBuilder);
+                        any = Any.pack(transferAssetContractBuilder.build());
+                        break;
+                    case "VoteAssetContract":
+                        VoteAssetContractOuterClass.VoteAssetContract.Builder voteAssetContractBuilder = VoteAssetContractOuterClass.VoteAssetContract.newBuilder();
+                        JsonFormat
+                                .merge(parameter.getJSONObject("value").toString(), voteAssetContractBuilder);
+                        any = Any.pack(voteAssetContractBuilder.build());
+                        break;
+                    case "VoteWitnessContract":
+                        WitnessContract.VoteWitnessContract.Builder voteWitnessContractBuilder = WitnessContract.VoteWitnessContract
+                                .newBuilder();
+                        JsonFormat
+                                .merge(parameter.getJSONObject("value").toString(), voteWitnessContractBuilder);
+                        any = Any.pack(voteWitnessContractBuilder.build());
+                        break;
+                    case "WitnessCreateContract":
+                        WitnessContract.WitnessCreateContract.Builder witnessCreateContractBuilder = WitnessContract.WitnessCreateContract
+                                .newBuilder();
+                        JsonFormat.merge(parameter.getJSONObject("value").toString(),
+                                witnessCreateContractBuilder);
+                        any = Any.pack(witnessCreateContractBuilder.build());
+                        break;
+                    case "AssetIssueContract":
+                        AssetIssueContractOuterClass.AssetIssueContract.Builder assetIssueContractBuilder = AssetIssueContractOuterClass.AssetIssueContract.newBuilder();
+                        JsonFormat
+                                .merge(parameter.getJSONObject("value").toString(), assetIssueContractBuilder);
+                        any = Any.pack(assetIssueContractBuilder.build());
+                        break;
+                    case "WitnessUpdateContract":
+                        WitnessContract.WitnessUpdateContract.Builder witnessUpdateContractBuilder = WitnessContract.WitnessUpdateContract
+                                .newBuilder();
+                        JsonFormat.merge(parameter.getJSONObject("value").toString(),
+                                witnessUpdateContractBuilder);
+                        any = Any.pack(witnessUpdateContractBuilder.build());
+                        break;
+                    case "ParticipateAssetIssueContract":
+                        AssetIssueContractOuterClass.ParticipateAssetIssueContract.Builder participateAssetIssueContractBuilder =
+                                AssetIssueContractOuterClass.ParticipateAssetIssueContract.newBuilder();
+                        JsonFormat.merge(parameter.getJSONObject("value").toString(),
+                                participateAssetIssueContractBuilder);
+                        any = Any.pack(participateAssetIssueContractBuilder.build());
+                        break;
+                    case "AccountUpdateContract":
+                        AccountContract.AccountUpdateContract.Builder accountUpdateContractBuilder = AccountContract.AccountUpdateContract
+                                .newBuilder();
+                        JsonFormat.merge(parameter.getJSONObject("value").toString(),
+                                accountUpdateContractBuilder);
+                        any = Any.pack(accountUpdateContractBuilder.build());
+                        break;
+                    case "FreezeBalanceContract":
+                        BalanceContract.FreezeBalanceContract.Builder freezeBalanceContractBuilder = BalanceContract.FreezeBalanceContract
+                                .newBuilder();
+                        JsonFormat.merge(parameter.getJSONObject("value").toString(),
+                                freezeBalanceContractBuilder);
+                        any = Any.pack(freezeBalanceContractBuilder.build());
+                        break;
+                    case "UnfreezeBalanceContract":
+                        BalanceContract.UnfreezeBalanceContract.Builder unfreezeBalanceContractBuilder = BalanceContract.UnfreezeBalanceContract
+                                .newBuilder();
+                        JsonFormat.merge(parameter.getJSONObject("value").toString(),
+                                unfreezeBalanceContractBuilder);
+                        any = Any.pack(unfreezeBalanceContractBuilder.build());
+                        break;
+                    case "UnfreezeAssetContract":
+                        AssetIssueContractOuterClass.UnfreezeAssetContract.Builder unfreezeAssetContractBuilder = AssetIssueContractOuterClass.UnfreezeAssetContract
+                                .newBuilder();
+                        JsonFormat.merge(parameter.getJSONObject("value").toString(),
+                                unfreezeAssetContractBuilder);
+                        any = Any.pack(unfreezeAssetContractBuilder.build());
+                        break;
+                    case "WithdrawBalanceContract":
+                        BalanceContract.WithdrawBalanceContract.Builder withdrawBalanceContractBuilder = BalanceContract.WithdrawBalanceContract
+                                .newBuilder();
+                        JsonFormat.merge(parameter.getJSONObject("value").toString(),
+                                withdrawBalanceContractBuilder);
+                        any = Any.pack(withdrawBalanceContractBuilder.build());
+                        break;
+                    case "UpdateAssetContract":
+                        AssetIssueContractOuterClass.UpdateAssetContract.Builder updateAssetContractBuilder = AssetIssueContractOuterClass.UpdateAssetContract
+                                .newBuilder();
+                        JsonFormat
+                                .merge(parameter.getJSONObject("value").toString(), updateAssetContractBuilder);
+                        any = Any.pack(updateAssetContractBuilder.build());
+                        break;
+                    case "SmartContract":
+                        SmartContractOuterClass.SmartContract.Builder smartContractBuilder = SmartContractOuterClass.SmartContract.newBuilder();
+                        JsonFormat
+                                .merge(parameter.getJSONObject("value").toString(), smartContractBuilder);
+                        any = Any.pack(smartContractBuilder.build());
+                        break;
+                    case "TriggerSmartContract":
+                        SmartContractOuterClass.TriggerSmartContract.Builder triggerSmartContractBuilder = SmartContractOuterClass.TriggerSmartContract
+                                .newBuilder();
+                        JsonFormat
+                                .merge(parameter.getJSONObject("value").toString(),
+                                        triggerSmartContractBuilder);
+                        any = Any.pack(triggerSmartContractBuilder.build());
+                        break;
+                    // todo add other contract
+                    default:
+                }
+                if (any != null) {
+                    String value = Hex.toHexString(any.getValue().toByteArray());
+                    parameter.put("value", value);
+                    contract.put("parameter", parameter);
+                    contracts.add(contract);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                ;
+            }
+        }
+        rawData.put("contract", contracts);
+        jsonTransaction.put("raw_data", rawData);
+        Protocol.Transaction.Builder transactionBuilder = Protocol.Transaction.newBuilder();
+        try {
+            JsonFormat.merge(jsonTransaction.toString(), transactionBuilder);
+            return transactionBuilder.build();
+        } catch (Exception e) {
+            return null;
+        }
 
+    }
+
+    /**
+     * 签名交易
+     * @param transaction
+     * @param privateKey
+     * @return
+     * @throws InvalidProtocolBufferException
+     * @throws NoSuchAlgorithmException
+     */
+    public static byte[] signTransactionByte(byte[] transaction, byte[] privateKey) throws InvalidProtocolBufferException, NoSuchAlgorithmException {
+        ECKey ecKey = ECKey.fromPrivate(privateKey);
+        Protocol.Transaction transaction1 = Protocol.Transaction.parseFrom(transaction);
+        byte[] rawdata = transaction1.getRawData().toByteArray();
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        digest.update(rawdata,0,rawdata.length);
+        byte[] hash= digest.digest();
+        byte[] sign = ecKey.sign(hash).toByteArray();
+        return transaction1.toBuilder().addSignature(ByteString.copyFrom(sign)).build().toByteArray();
+    }
 
 
 }
