@@ -210,7 +210,7 @@ public class Trc20ServiceImpl implements Trc20Service {
         JSONObject param = new JSONObject();
         param.put("owner_address", from);
         param.put("to_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(toAddress)));
-        param.put("amount", amount.multiply(new BigDecimal("1000000")));
+        param.put("amount", amount.multiply(new BigDecimal(contract.getDecimals())));
         String _result = HttpUtil.post(url, param.toJSONString());
         String txid = null;//交易id
         if (StringUtils.isNotEmpty(_result)) {
