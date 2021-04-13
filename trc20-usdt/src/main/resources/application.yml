@@ -22,8 +22,8 @@ spring:
     name: service-rpc-trc20-usdt
   data:
     mongodb:
-      uri: mongodb://8.129.44.191:27017/db_wallet
-#      uri: mongodb://root:123456@43.128.23.74:27017/admin
+#      uri: mongodb://8.129.44.191:27017/db_wallet
+      uri: mongodb://wallet:123456@43.128.23.74:27017/db_wallet
       #more ip cluster
       #uri=mongodb://user:pwd@ip1:port1,ip2:port2/database
 
