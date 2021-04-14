@@ -188,7 +188,7 @@ public class Trc20ServiceImpl implements Trc20Service {
     public String getTrc20Account(String contractAddress, String address) {
         String url = coin.getRpc() + "/wallet/triggerconstantcontract";
         Map<String, Object> map = new HashMap<>();
-        address = TrxUtils.addZeroForNum(ByteArray.toHexString(WalletApi.decodeFromBase58Check(address)), 64);
+       // address = TrxUtils.addZeroForNum(ByteArray.toHexString(WalletApi.decodeFromBase58Check(address)), 64);
         map.put("contract_address", contractAddress);
         map.put("function_selector", "balanceOf(address)");
         map.put("parameter", address);
@@ -280,7 +280,7 @@ public class Trc20ServiceImpl implements Trc20Service {
 //        return postForEntity(url, param).getBody();
         String url = coin.getRpc() + "/wallet/createtransaction";
         JSONObject param = new JSONObject();
-        param.put("owner_address", from);
+        param.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(from)));
         param.put("to_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(toAddress)));
         param.put("amount", amount.multiply(new BigDecimal(contract.getDecimals())));
         String txid =   signAndBroadcast(postForEntity(url, JSONObject.toJSONString(param)).getBody(), getPrivateKey(from));
@@ -313,19 +313,29 @@ public class Trc20ServiceImpl implements Trc20Service {
 //        String param = JSON.toJSONString(map);
 //        ResponseEntity<String> stringResponseEntity = postForEntity(url, param);
 //        return signAndBroadcast(JSON.parseObject(stringResponseEntity.getBody()).getString("transaction"), getPrivateKey(from));
-        JSONObject param = new JSONObject();
+        //JSONObject param = new JSONObject();
+        amount = amount.multiply(contract.getDecimal());
         String uint256 = TrxUtils.addZeroForNum(amount.toBigInteger().toString(16), 64);
         String to_address = ByteArray.toHexString(WalletApi.decodeFromBase58Check(to));
         to_address = TrxUtils.addZeroForNum(to_address, 64);
+//        param.put("contract_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(contract.getAddress())));
+//        param.put("function_selector", "transfer(address,uint256)");
+//
+//
+//        param.put("parameter", to_address + uint256);
+//        param.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(from)));
+//        param.put("call_value", 0);
+//        param.put("fee_limit", contract.getGasLimit());
+
+        //--------------------------------------------------
+        Map<String, Object> param = new HashMap<>();
+        param.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(from)));
         param.put("contract_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(contract.getAddress())));
         param.put("function_selector", "transfer(address,uint256)");
-
-
         param.put("parameter", to_address + uint256);
-        param.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(from)));
         param.put("call_value", 0);
         param.put("fee_limit", contract.getGasLimit());
-        String txid =   signAndBroadcast(postForEntity(url, JSONObject.toJSONString(param)).getBody(), getPrivateKey(from));
+        String txid =   signAndBroadcast(JSON.parseObject(postForEntity(url, JSONObject.toJSONString(param)).getBody()).getString("transaction"), getPrivateKey(from));
 
         return txid;
 
@@ -477,7 +487,7 @@ public class Trc20ServiceImpl implements Trc20Service {
                         String type = parseObject.getJSONObject("raw_data").getJSONArray("contract").getJSONObject(0).getString("type");
                         if ("TriggerSmartContract".equals(type)) {
                             //合约地址转账
-                            triggerSmartContract(addressList, txId, parseObject);
+                           // triggerSmartContract(addressList, txId, parseObject);
 
                         } else if ("TransferContract".equals(type)) {
                             //trx 转账
@@ -595,35 +605,34 @@ public class Trc20ServiceImpl implements Trc20Service {
 
     }
 
-    public Recharge triggerSmartContract(List<String> addressList, String txId, JSONObject parseObject) {
+    public Recharge triggerSmartContract(String txId, JSONObject parseObject) {
         String ownerAddress = TrxUtils.getOwnerAddress(parseObject);
         Long timestamp = parseObject.getJSONObject("raw_data").getLong("expiration");
         Long blockHeight = parseObject.getLong("blockNumber");
-       String to_address = TrxUtils.getToAddress(parseObject);
+       String toAddress = TrxUtils.getToAddress(parseObject);
        BigDecimal amount = BigDecimal.ZERO;
         String amountStr = TrxUtils.getAmountStr(parseObject);
         if (StringUtils.isNotEmpty(amountStr)) {
             amount = new BigDecimal(amountStr).divide(contract.getDecimal(),6,RoundingMode.HALF_UP);
         }
 
-        for (String address : addressList) {
-            if (address.equals(to_address)) {
-                log.info("===to_address:" + to_address + "===amount:" + amount);
-                Recharge recharge = Recharge.builder()
-                        .txid(txId)
-                        .toAddress(to_address)
-                        .fromAddress(ownerAddress)
-                        .status(1)
-                        .time(new Date(timestamp))
-                        .amount(amount)
-                        .blockHeight(blockHeight)
-                        .build();
-                return recharge;
-            }
+        //for (String address : addressList) {
+           // if (address.equals(to_address)) {
+           log.info("===to_address:" + toAddress + "===amount:" + amount);
+        return Recharge.builder()
+                .txid(txId)
+                .toAddress(toAddress)
+                .fromAddress(ownerAddress)
+                .status(1)
+                .time(new Date(timestamp))
+                .amount(amount)
+                .blockHeight(blockHeight)
+                .build();
+           // }
 
-        }
+        //}
 
-        return null;
+       // return null;
     }
 
 
@@ -650,9 +659,34 @@ public class Trc20ServiceImpl implements Trc20Service {
         return new BigDecimal(balance).divide(contract.getDecimal(), 6, RoundingMode.FLOOR);
     }
 
+//    @Override
+//    public BigDecimal getTokenBalance(String address) throws Exception {
+//        String result = getTrc20Account(contract.getAddress(), address);
+//        BigDecimal amount = BigDecimal.ZERO;
+//        if (StringUtils.isNotEmpty(result)) {
+//            JSONObject obj = JSONObject.parseObject(result);
+//            JSONArray results = obj.getJSONArray("constant_result");
+//            if (results != null && results.size() > 0) {
+//                BigInteger _amount = new BigInteger(results.getString(0), 16);
+//                amount = new BigDecimal(_amount).divide(contract.getDecimal(), 6, RoundingMode.FLOOR);
+//            }
+//        }
+//        log.info(String.format("账号%s的balance=%s", address, amount.toString()));
+//        return new BigDecimal(amount.toString());
+//    }
+
     @Override
     public BigDecimal getTokenBalance(String address) throws Exception {
-        String result = getTrc20Account(contract.getAddress(), address);
+        String url = coin.getRpc() + "/wallet/triggerconstantcontract";
+        Map<String, Object> map = new HashMap<>();
+        String parAddress = TrxUtils.addZeroForNum(ByteArray.toHexString(WalletApi.decodeFromBase58Check(address)), 64);
+        map.put("contract_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(contract.getAddress())));
+        map.put("function_selector", "balanceOf(address)");
+        map.put("parameter", parAddress);
+        map.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(address)));
+        String param = JSON.toJSONString(map);
+        String result =  postForEntity(url, param).getBody();
+
         BigDecimal amount = BigDecimal.ZERO;
         if (StringUtils.isNotEmpty(result)) {
             JSONObject obj = JSONObject.parseObject(result);
