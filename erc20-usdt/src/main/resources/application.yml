@@ -43,7 +43,7 @@ coin:
   #节点地址  http://localhost:8545/
   rpc: "http://43.128.34.237:8485"
   #token名称
-  name: USDT
+  name: EUSDT
   #单位
   unit: EUSDT
   #节点密码
@@ -82,7 +82,8 @@ etherscan:
 # 扫快规则
 rule:
   # 初始化区块高度
-  initBlockHeight: "latest"
+#  initBlockHeight: "latest"
+  initBlockHeight: 12230000
   #扫描间隔时间
   interval: 5000
   #间隔区块
