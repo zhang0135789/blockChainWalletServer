@@ -2,8 +2,10 @@ package com.feel.modules.wallet.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.feel.modules.wallet.entity.Recharge;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**
@@ -64,5 +66,7 @@ public interface Trc20Service extends WalletService{
      * @return
      */
     public  String getAccount(String address);
+
+    public  String createAccount(String address) throws InvalidProtocolBufferException, NoSuchAlgorithmException;
 
 }

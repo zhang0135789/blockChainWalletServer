@@ -19,12 +19,11 @@ spring:
     name: service-rpc-erc20-usdt
   data:
     mongodb:
-       uri: mongodb://8.129.44.191:27017/db_wallet
-#      uri: mongodb://43.128.23.74:27017/db_wallet
+      uri: mongodb://43.128.23.74:27017/db_wallet
       #more ip cluster
       #uri=mongodb://user:pwd@ip1:port1,ip2:port2/database
-#      username: admin
-#      password: 123456
+      username: admin
+      password: 123456
 
 # 日志配置
 logging:
