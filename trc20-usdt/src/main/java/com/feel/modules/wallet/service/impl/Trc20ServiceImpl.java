@@ -295,37 +295,11 @@ public class Trc20ServiceImpl implements Trc20Service {
     public String transferToken(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception {
 //        //发起交易
         String url = coin.getRpc() + "/wallet/triggersmartcontract";
-//
-//        Map<String, Object> map = new HashMap<>();
-//
-//        String to_address = ByteArray.toHexString(WalletApi.decodeFromBase58Check(to));
-//        to_address = TrxUtils.addZeroForNum(to_address, 64);
-//        //amount = amount.multiply(new BigDecimal(1 + TrxUtils.getSeqNumByLong(0L, weiMap.get(symbol))));
-//        amount = amount.multiply(contract.getDecimal());
 
-//
-//        map.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(from)));
-//        map.put("contract_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(contract.getAddress())));
-//        map.put("function_selector", "transfer(address,uint256)");
-//        map.put("parameter", to_address + uint256);
-//        map.put("call_value", 0);
-//        map.put("fee_limit", coin.getGasLimit());
-//        String param = JSON.toJSONString(map);
-//        ResponseEntity<String> stringResponseEntity = postForEntity(url, param);
-//        return signAndBroadcast(JSON.parseObject(stringResponseEntity.getBody()).getString("transaction"), getPrivateKey(from));
-        //JSONObject param = new JSONObject();
         amount = amount.multiply(contract.getDecimal());
         String uint256 = TrxUtils.addZeroForNum(amount.toBigInteger().toString(16), 64);
         String to_address = ByteArray.toHexString(WalletApi.decodeFromBase58Check(to));
         to_address = TrxUtils.addZeroForNum(to_address, 64);
-//        param.put("contract_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(contract.getAddress())));
-//        param.put("function_selector", "transfer(address,uint256)");
-//
-//
-//        param.put("parameter", to_address + uint256);
-//        param.put("owner_address", ByteArray.toHexString(WalletApi.decodeFromBase58Check(from)));
-//        param.put("call_value", 0);
-//        param.put("fee_limit", contract.getGasLimit());
 
         //--------------------------------------------------
         Map<String, Object> param = new HashMap<>();
@@ -335,7 +309,14 @@ public class Trc20ServiceImpl implements Trc20Service {
         param.put("parameter", to_address + uint256);
         param.put("call_value", 0);
         param.put("fee_limit", contract.getGasLimit());
-        String txid =   signAndBroadcast(JSON.parseObject(postForEntity(url, JSONObject.toJSONString(param)).getBody()).getString("transaction"), getPrivateKey(from));
+        String prvkey ="";
+
+        if(from.equals(coin.getWithdrawAddress())){
+            prvkey = getPrivateKey(from,coin.getWithdrawWalletPassword(),coin.getWithdrawWallet());
+        }else {
+            prvkey =  getPrivateKey(from);
+        }
+        String txid =   signAndBroadcast(JSON.parseObject(postForEntity(url, JSONObject.toJSONString(param)).getBody()).getString("transaction"), prvkey);
 
         return txid;
 
@@ -705,6 +686,18 @@ public class Trc20ServiceImpl implements Trc20Service {
         String privateKey = "";
         try {
             privateKey = TrxUtils.decrypt(account.getAddress() + account.getAccount(), account.getWalletFile());
+        } catch (Exception e) {
+            log.error(e.toString());
+        }
+
+        return privateKey;
+    }
+
+    public String getPrivateKey(String address,String pass,String wallet) {
+        Account account = accountService.findByAddress(address);
+        String privateKey = "";
+        try {
+            privateKey = TrxUtils.decrypt(account.getAddress() + pass, wallet);
         } catch (Exception e) {
             log.error(e.toString());
         }

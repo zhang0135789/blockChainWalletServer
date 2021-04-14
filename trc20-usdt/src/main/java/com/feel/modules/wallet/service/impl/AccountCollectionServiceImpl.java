@@ -53,7 +53,7 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
                         if(account.getGas().compareTo(coin.getDefaultMinerFee()) < 0){
                             BigDecimal bigDecimal = trc20Service.getBalance(coin.getWithdrawWallet());
                             if(bigDecimal.compareTo(coin.getDefaultMinerFee()) < 0){
-                                log.error("手续费地址余额不足------------------->"+coin.getWithdrawWallet());
+                                log.error("手续费地址余额不足------------------->"+coin.getWithdrawAddress());
                                 return;
                             }
                             trc20Service.transfer(coin.getWithdrawWallet(),account.getAddress(),coin.getDefaultMinerFee(),null);

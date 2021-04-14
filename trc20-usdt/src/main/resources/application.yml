@@ -56,10 +56,12 @@ coin:
   step: 1
   #初始化扫描块高
   init-block-height: 28836775
-  # 手续费地址 提现地址
+  # 提现/手续费 地址
   withdraw-address: THJeEhbAd5aWSgpTs6bdixwPDvcaEbYwfp
+  # 提现/手续费钱包密码
+  withdraw-wallet-password: 1000
   # 手续费钱包
-  withdraw-wallet: THJeEhbAd5aWSgpTs6bdixwPDvcaEbYwfp
+  withdraw-wallet: QNC6g0esLkrhm8wJ9EgMLPm1EdQJ7C31qLod5+H1OkM5n2Xg6BGPPkGqbm8WnqYvGSLu9UYD7pRFCTCHNLwbujhpiYQs4BjmyqDdvbyjbxQ=
   # 归集地址
   collection-address: TWSLfAMbzkMZhRvpYumtjz9JYR8rnLiQWV
   #默认矿工费
