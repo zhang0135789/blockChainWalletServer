@@ -19,7 +19,9 @@ spring:
     name: service-rpc-erc20-usdt
   data:
     mongodb:
-      uri: mongodb://43.128.23.74:27017/db_wallet
+      uri: mongodb://8.129.44.191:27017/db_wallet
+#      uri: mongodb://wallet:123456@43.128.23.74:27017/db_wallet
+
       #more ip cluster
       #uri=mongodb://user:pwd@ip1:port1,ip2:port2/database
       username: admin
@@ -40,40 +42,48 @@ swagger:
 
 coin:
   #节点地址  http://localhost:8545/
-  rpc: "http://43.128.34.237:8485"
+#  rpc: "http://43.128.34.237:8485"
+  # 测试网络
+  rpc: "http://localhost:8545/"
   #token名称
   name: EUSDT
   #单位
   unit: EUSDT
   #节点密码
-  password: 123456
+  password:
   #
   step: 10
   #初始化扫描块高
   init-block-height: 50000
-  # 手续费地址
-  withdraw-address:
-  # 手续费钱包
-  withdraw-wallet:
+  # 提现/手续费 地址
+  withdraw-address: "0x5ac6e22b5112728e4db5145eaff0e64671df09b7"
+  # 提现/手续费钱包密码
+  withdraw-wallet-password: ""
+  # 提现/手续费钱包
+  withdraw-wallet: "UTC--2021-04-14T06-16-08.534000000Z--5ac6e22b5112728e4db5145eaff0e64671df09b7.json"
   # 归集地址
-  collection-address:
+  collection-address: "0x6323297987278Bc22a114d2c6E2a995abD9D98D5"
   #默认矿工费
-  default-miner-fee: 0.0001
+  default-miner-fee: "0.0001"
   # 最小归集金额
   min-collect-amount: 50
   # keystore存放地址
   keystore-path: /home/zz/data/eth/data/keystore
+  #手续费
+  gas-limit: "50000"
 
 
 # 合约配置
 contract:
   #erc20-usdt合约地址 0xdac17f958d2ee523a2206206994597c13d831ec7
-  address: 0xdac17f958d2ee523a2206206994597c13d831ec7
+  #address: "0xdac17f958d2ee523a2206206994597c13d831ec7"
+  # 测试合约
+  address: "0x8CaCa77007c0D7f689e05A9B230A717962881fb0"
   #合约单位
   #wei:0,kwei:3,wwei:4,mwei:6,gwei:9,szabo:12,finney:15,ether:18,kether:21,mether:24,gether:27
-  decimals: mwei
+  decimals: "mwei"
   #手续费
-  gas-limit: 50000
+  gas-limit: "50000"
 
 etherscan:
   token: BYFVKAANT5JVQPURWJMUAEUFCKGZ56P68
@@ -81,8 +91,8 @@ etherscan:
 # 扫快规则
 rule:
   # 初始化区块高度
-#  initBlockHeight: "latest"
-  initBlockHeight: 12230000
+  initBlockHeight: "latest"
+#  initBlockHeight: 12230000
   #扫描间隔时间
   interval: 5000
   #间隔区块
@@ -95,6 +105,8 @@ rule:
 collection:
   # 每两个小时检查一次
   collectionCoin: "0 0 */2 * * ?"
+#  collectionCoin: "0 0/2 * * * ?"
   # 每3个小时检查一次
   checkAccount: "0 0 */3 * * ?"
+#  checkAccount: "0 0/2 * * * ?"
 

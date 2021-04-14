@@ -50,7 +50,7 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
             //给满足条件的地址充矿工费，条件1：eth额度小于minerFee,条件2:balance大于等于minCollectAmount
             if (ethBalance.compareTo(minerFee) < 0
                     && tokenBalance.compareTo(coin.getMinCollectAmount()) >= 0) {
-                log.info("======>process account:{}", account);
+                log.info("======>process account:{}", account.getAddress());
                 //计算本次要转的矿工费
                 BigDecimal feeAmt = minerFee.subtract(ethBalance);
                 //发送旷工费
@@ -59,6 +59,7 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
                 if(ObjectUtil.isNotNull(hash)){
                     ethBalance = minerFee;
                 }
+                accountService.updateStatus(account.getAddress(),1);
             }
             //同步账户余额
             accountService.updateBalanceAndGas(account.getAddress(), tokenBalance, ethBalance);
@@ -79,7 +80,11 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
             BigDecimal minerFee = erc20Service.getMinerFee(contract.getGasLimit());
             BigDecimal tokenBalance = erc20Service.getTokenBalance(account.getAddress());
             String hash = erc20Service.transferToken(account.getAddress(), collectionAddress, tokenBalance, minerFee);
-            log.info("collection success : from[{}],to[{}],amount[{}],hash[{}]",account.getAddress(),coin.getMasterAddress(),tokenBalance,minerFee);
+
+            accountService.updateStatus(account.getAddress(),0);
+
+            log.info("collection success : from[{}],to[{}],amount[{}],hash[{}]",account.getAddress(),coin.getCollectionAddress(),tokenBalance,hash);
+
             //TODO 归集记录
             CollectionTran collectionTran = new CollectionTran();
             collectionTran.setFromAddress(account.getAddress());

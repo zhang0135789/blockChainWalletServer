@@ -35,7 +35,7 @@ public class AccountCollection {
             totalPage += 1;
         }
 
-        for(int page = 0;page<=totalPage;page++){
+        for(int page = 0; page<=totalPage; page++){
             List<Account> accounts = accountService.find(page,pageSize);
             accounts.forEach(account->{
                 accountCollectionService.checkAccount(account);

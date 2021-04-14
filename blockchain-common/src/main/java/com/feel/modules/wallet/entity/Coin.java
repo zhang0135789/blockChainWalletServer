@@ -34,7 +34,7 @@ public class Coin implements Serializable {
     @ApiModelProperty(name = "keystorePath" , value = "keystore存放位置")
     private String keystorePath;
 
-    @ApiModelProperty(name = "defaultMinerFee" , value = "")
+    @ApiModelProperty(name = "defaultMinerFee" , value = "默认的矿工费")
     private BigDecimal defaultMinerFee;
 
     @ApiModelProperty(name = "withdrawAddress" , value = "提现地址(手续费)")

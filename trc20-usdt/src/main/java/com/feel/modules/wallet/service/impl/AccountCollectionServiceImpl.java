@@ -76,25 +76,25 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
             String toAddress = coin.getCollectionAddress();
 
 
-                    BigDecimal amount = BigDecimal.ZERO;
-                    try {
-                        amount = trc20Service.getTokenBalance(account.getAddress());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            BigDecimal amount = BigDecimal.ZERO;
+            try {
+                amount = trc20Service.getTokenBalance(account.getAddress());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-                    if (amount.compareTo(BigDecimal.ONE) < 0) {
-                        accountService.updateBalance(account.getAddress(),BigDecimal.ZERO);
-                        return;
-                    }
+            if (amount.compareTo(BigDecimal.ONE) < 0) {
+                accountService.updateBalance(account.getAddress(),BigDecimal.ZERO);
+                return;
+            }
 
 //
-                    // 汇集 转账
-                    String transaction = trc20Service.transferToken(account.getAddress(), toAddress, amount,BigDecimal.ZERO);
-                    log.info("提现结果："+transaction);
+            // 汇集 转账
+            String transaction = trc20Service.transferToken(account.getAddress(), toAddress, amount,BigDecimal.ZERO);
+            log.info("提现结果："+transaction);
 
-                    //提现成功需要，更新本地余额
-                    accountService.updateBalance(account.getAddress(),BigDecimal.ZERO);
+            //提现成功需要，更新本地余额
+            accountService.updateBalance(account.getAddress(),BigDecimal.ZERO);
 
             //TODO 归集记录
             CollectionTran collectionTran = new CollectionTran();

@@ -195,7 +195,21 @@ public class Erc20ServiceImpl implements Erc20Service {
     public String withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
         log.info("提现: from[{}],to[{}],amount[{}]" , coin.getWithdrawAddress() , to , amount);
 
-        String txid = transferToken(coin.getWithdrawAddress(), to, amount, true);
+        Credentials credentials;
+        try {
+            credentials = WalletUtils.loadCredentials(
+                    coin.getWithdrawWalletPassword(),
+                    coin.getKeystorePath() + "/" + coin.getWithdrawWallet());
+        }catch (IOException e) {
+            log.info("私钥文件不存在",e);
+            throw new RuntimeException("私钥文件不存在");
+        }catch (CipherException e) {
+            log.info("解密失败，密码不正确",e);
+            throw new RuntimeException("解密失败，密码不正确");
+        }
+
+//        String txid = transferToken(coin.getWithdrawAddress(), to, amount, true);
+        String txid = handleTransferToken(credentials, to , amount);
         Withdraw withdraw = Withdraw.builder()
                 .fromAddress(coin.getWithdrawAddress())
                 .toAddress(to)
@@ -263,7 +277,7 @@ public class Erc20ServiceImpl implements Erc20Service {
             Function fn = new Function("transfer", Arrays.asList(new Address(payment.getTo()), new Uint256(value)), Collections.<TypeReference<?>> emptyList());
             String data = FunctionEncoder.encode(fn);
             BigInteger maxGas = contract.getGasLimit();
-            log.info("from={},value={},gasPrice={},gasLimit={},nonce={},address={}",payment.getCredentials().getAddress(), value, gasPrice, maxGas, nonce,payment.getTo());
+            log.info("from = {}, value = {}, gasPrice = {}, gasLimit = {}, nonce = {}, address = {}",payment.getCredentials().getAddress(), value, gasPrice, maxGas, nonce,payment.getTo());
             RawTransaction rawTransaction = RawTransaction.createTransaction(
                     nonce, gasPrice, maxGas, contract.getAddress(), data);
             byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, payment.getCredentials());
@@ -275,10 +289,10 @@ public class Erc20ServiceImpl implements Erc20Service {
             if (StringUtils.isEmpty(txid)) {
                 throw new RuntimeException("发送交易失败");
             } else {
-                if(ObjectUtil.isNotNull(etherApiUtils)){
-                    log.info("=====发送Etherscan广播交易======");
-                    etherApiUtils.sendRawTransaction(hexValue);
-                }
+//                if(ObjectUtil.isNotNull(etherApiUtils)){
+//                    log.info("=====发送Etherscan广播交易======");
+//                    etherApiUtils.sendRawTransaction(hexValue);
+//                }
                 return txid;
             }
         } catch (Exception e) {
@@ -373,10 +387,10 @@ public class Erc20ServiceImpl implements Erc20Service {
                 log.error("发送交易失败");
                 return null;
             } else {
-                if(etherApiUtils != null){
-                    log.info("=====发送Etherscan广播交易======");
-                    etherApiUtils.sendRawTransaction(hexValue);
-                }
+//                if(etherApiUtils != null){
+//                    log.info("=====发送Etherscan广播交易======");
+//                    etherApiUtils.sendRawTransaction(hexValue);
+//                }
                 return txid;
             }
         } catch (Exception e) {

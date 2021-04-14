@@ -3,8 +3,10 @@ package com.feel.modules.wallet.controller;
 import cn.hutool.core.util.ObjectUtil;
 import com.feel.modules.wallet.entity.Account;
 import com.feel.modules.wallet.entity.Contract;
+import com.feel.modules.wallet.service.AccountCollectionService;
 import com.feel.modules.wallet.service.AccountService;
 import com.feel.modules.wallet.service.Erc20Service;
+import com.feel.modules.wallet.utils.AccountCollection;
 import com.feel.modules.wallet.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -105,7 +107,7 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     @GetMapping("/withdrawTransfer")
     @ApiOperation("提现")
     @Override
-    R withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
+    public R withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
         String txid = null;
         try {
             txid = walletService.withdrawTransfer(to,amount,fee);
@@ -116,5 +118,33 @@ public class Erc20Controller extends WalletController<Erc20Service>{
         }
         return R.ok(txid);
     }
+
+
+    @Autowired
+    private AccountCollectionService accountCollectionService;
+
+    @GetMapping("/collection")
+    @ApiOperation("归集")
+    public R check() {
+        log.info("======> 开始检查账户");
+        try {
+            AccountCollection accountCollection = new AccountCollection(accountService , 100);
+            accountCollection.runCheckAccount(accountCollectionService);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        log.info("======> 开始归集");
+        try {
+            AccountCollection accountCollection = new AccountCollection(accountService , 100);
+            accountCollection.runCollectionCoin(accountCollectionService);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return R.ok();
+    }
+
 
 }
