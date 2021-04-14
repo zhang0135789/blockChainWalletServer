@@ -217,7 +217,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<Account> findByBalance(BigDecimal minAmount) {
         Query query = new Query();
-        Criteria criteria = Criteria.where("amount").gte(minAmount);
+        Criteria criteria = Criteria.where("balance").gte(minAmount);
         Sort.Order order = new Sort.Order(Sort.Direction.DESC, "balance");
         Sort sort = Sort.by(order);
         query.addCriteria(criteria);
@@ -279,7 +279,7 @@ public class AccountServiceImpl implements AccountService {
         Query query = new Query();
         Criteria criteria = Criteria.where("address").is(address);
         query.addCriteria(criteria);
-        Update update = Update.update("status",1);
+        Update update = Update.update("status",status);
         mongoTemplate.updateFirst(query, update, getCollectionName());
     }
 

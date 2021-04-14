@@ -57,15 +57,15 @@ coin:
   #初始化扫描块高
   init-block-height: 28836775
   # 手续费地址 提现地址
-  withdraw-address: TWSLfAMbzkMZhRvpYumtjz9JYR8rnLiQWV
+  withdraw-address: THJeEhbAd5aWSgpTs6bdixwPDvcaEbYwfp
   # 手续费钱包
-  withdraw-wallet: TWSLfAMbzkMZhRvpYumtjz9JYR8rnLiQWV
+  withdraw-wallet: THJeEhbAd5aWSgpTs6bdixwPDvcaEbYwfp
   # 归集地址
   collection-address: TWSLfAMbzkMZhRvpYumtjz9JYR8rnLiQWV
   #默认矿工费
-  default-miner-fee: 0.5
+  default-miner-fee: 5
   # 最小归集金额
-  min-collect-amount: 10
+  min-collect-amount: 3
 
 
 # 合约配置

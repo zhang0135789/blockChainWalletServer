@@ -45,12 +45,12 @@ public interface Trc20Service extends WalletService{
 
     /**
      * 获取trc20交易信息
-     * @param addressList
+     * @param
      * @param txId
      * @param parseObject
      * @return
      */
-    public Recharge triggerSmartContract(List<String> addressList, String txId, JSONObject parseObject);
+    public Recharge triggerSmartContract( String txId, JSONObject parseObject);
 
     /**
      * 获取合约地址余额

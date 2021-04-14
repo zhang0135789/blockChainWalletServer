@@ -45,19 +45,28 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
     @Override
     public void checkAccount(Account account) {
         try {
-            List<Account> accounts = accountService.findByBalance(coin.getMinCollectAmount());
-            accounts.forEach( i -> {
-                if(i.getGas().compareTo(coin.getDefaultMinerFee()) < 0){
+            BigDecimal tokenBlance = trc20Service.getTokenBalance(account.getAddress());
+            BigDecimal blance = trc20Service.getBalance(account.getAddress());
+                if(blance.compareTo(coin.getDefaultMinerFee()) < 0 && tokenBlance.compareTo(coin.getMinCollectAmount()) >= 0){
                     try {
-                        trc20Service.transfer(coin.getWithdrawWallet(),i.getAddress(),coin.getDefaultMinerFee(),null);
+                        account.setGas(blance);
+                        if(account.getGas().compareTo(coin.getDefaultMinerFee()) < 0){
+                            BigDecimal bigDecimal = trc20Service.getBalance(coin.getWithdrawWallet());
+                            if(bigDecimal.compareTo(coin.getDefaultMinerFee()) < 0){
+                                log.error("手续费地址余额不足------------------->"+coin.getWithdrawWallet());
+                                return;
+                            }
+                            trc20Service.transfer(coin.getWithdrawWallet(),account.getAddress(),coin.getDefaultMinerFee(),null);
+                            account.setGas(coin.getDefaultMinerFee().add(account.getGas()));
+                            accountService.updateStatus(account.getAddress(),1);
+                        }
                     }catch (Exception e){
                         log.error(e.toString());
                         return;
                     }
 
                 }
-                accountService.updateStatus(i.getAddress(),1);
-            });
+                accountService.updateBalanceAndGas(account.getAddress(),tokenBlance,account.getGas());
         } catch (Exception e) {
             e.printStackTrace();
             log.error("check account error : " , e);
@@ -71,6 +80,10 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
     @Override
     public void collectionCoin(Account account) {
         try {
+
+            if(account.getStatus() != 1){
+                return;
+            }
 
             //汇集到的地址
             String toAddress = coin.getCollectionAddress();
@@ -93,8 +106,11 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
                     String transaction = trc20Service.transferToken(account.getAddress(), toAddress, amount,BigDecimal.ZERO);
                     log.info("提现结果："+transaction);
 
+
                     //提现成功需要，更新本地余额
                     accountService.updateBalance(account.getAddress(),BigDecimal.ZERO);
+                    //更新状态
+                    accountService.updateStatus(account.getAddress(),0);
 
             //TODO 归集记录
             CollectionTran collectionTran = new CollectionTran();

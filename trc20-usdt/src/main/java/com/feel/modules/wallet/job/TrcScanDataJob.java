@@ -85,7 +85,7 @@ public class TrcScanDataJob extends ScanDataJob {
                                 if ("TriggerSmartContract".equals(type)) {
                                     //合约地址转账
                                     //triggerSmartContract(addressList, txId, parseObject);
-                                    Recharge recharge1 = trc20Service.triggerSmartContract(addressList, txId, json);
+                                    Recharge recharge1 = trc20Service.triggerSmartContract(txId, json);
                                     if(recharge1 != null){
                                         String res = trc20Service.getTransactionByBlockNum(finalI);
                                         JSONObject jsonObject = JSONObject.parseObject(res);
