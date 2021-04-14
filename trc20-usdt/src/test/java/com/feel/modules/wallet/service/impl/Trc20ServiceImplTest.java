@@ -8,6 +8,9 @@ import com.alibaba.fastjson.JSONObject;
 
 import com.feel.common.utils.TrxUtils;
 import com.feel.modules.wallet.entity.Coin;
+
+import com.feel.modules.wallet.service.Trc20Service;
+import com.google.protobuf.InvalidProtocolBufferException;
 import org.apache.tomcat.util.descriptor.web.JspConfigDescriptorImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +19,10 @@ import org.tron.common.utils.ByteArray;
 import org.tron.walletserver.WalletApi;
 
 
+import javax.annotation.Resource;
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,14 +33,18 @@ public class Trc20ServiceImplTest {
 
     @Autowired
     private Coin coin;
+    @Resource
+    private Trc20Service trc20Service;
 
     @Test
-    void createNewAddress() {
+    void createNewAddress() throws InvalidProtocolBufferException, NoSuchAlgorithmException {
       //  Map<String, String> map = TronUtils.createAddress();
         //{"privateKey":"7a2195d52c42c34a8de11633de7fdfbbf6883d2e95918ccd845230629fd95768",
         // "address":"TA1gLs6FS8eik5NJqjvm73L4qRqWDmLwmh",
         // "hexAddress":"410077a7caa7efe71a5e8ef1fe9ee697c8e755eff6"}
       //  System.out.println(JSONObject.toJSONString(map));
+       String str = trc20Service.createAccount("TBNKgZWMX2sWrPNfRF73fNBeHvrUHv7yRU");
+        System.out.println(str);
     }
 
     @Test

@@ -35,6 +35,8 @@ public class Trc20Controller extends WalletController<Trc20Service>{
     private AccountService accountService;
     @Resource
     private Coin coin;
+    @Resource
+    private Trc20Service trc20Service;
 
 
     @Override
@@ -42,11 +44,15 @@ public class Trc20Controller extends WalletController<Trc20Service>{
     @ApiOperation("获取新地址")
     public R<String> getNewAddress(String accountName) {
         Account account = accountService.findByName(accountName);
+
         if(ObjectUtil.isNotEmpty(account)) {
             return R.ok(account);
         }
         try {
             account = walletService.createNewAddress(accountName);
+//                String res =   trc20Service.createAccount(account.getAddress());
+//                log.info("------------"+res);
+
         } catch (Exception e) {
             log.error("获取地址失败",e);
             return R.error("获取地址失败");
@@ -54,6 +60,9 @@ public class Trc20Controller extends WalletController<Trc20Service>{
 
         return R.ok(account.getAddress());
     }
+
+
+
 
     @Override
     @GetMapping("/height")

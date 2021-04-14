@@ -11,17 +11,22 @@ import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.spongycastle.util.encoders.Hex;
 import org.tron.common.crypto.ECKey;
+import org.tron.common.utils.ByteArray;
 import org.tron.common.utils.JsonFormat;
 import org.tron.protos.Protocol;
 import org.tron.protos.contract.*;
+import org.tron.walletserver.WalletApi;
 
 import javax.annotation.Resource;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -469,7 +474,74 @@ public class TrxUtils {
         return transaction1.toBuilder().addSignature(ByteString.copyFrom(sign)).build().toByteArray();
     }
 
+    /**
+     *  T ---->  41
+     * @param address
+     * @return
+     */
+    public static String toHexAddress(String address){
+        return  ByteArray.toHexString(WalletApi.decodeFromBase58Check(address));
+    }
+    /**
+     * 41 ---- > T
+     * @param address
+     * @return
+     */
+    public static String fromHexAddress(String address){
+        return WalletApi.encode58Check(ByteArray.fromHexString(address));
+    }
 
+
+    public static  String getToAddress(JSONObject json){
+
+        String dataStr = getData(json).substring(8);
+        List<String> strList = TrxUtils.getStrList(dataStr, 64);
+
+        if (strList.size() != 2) {
+            return null;
+        }
+        String to_address = TrxUtils.delZeroForNum(strList.get(0));
+        if (!to_address.startsWith("41")) {
+            to_address = "41" + to_address;
+        }
+
+        to_address = WalletApi.encode58Check(ByteArray.fromHexString(to_address));
+
+        return to_address;
+    }
+
+    public  static  String getData(JSONObject json){
+        String data = json.getJSONObject("raw_data").getJSONArray("contract").getJSONObject(0).getJSONObject("parameter").getJSONObject("value").getString("data");
+            return data;
+    }
+
+    public static String getAmountStr(JSONObject json){
+        String dataStr = getData(json).substring(8);
+        List<String> strList = TrxUtils.getStrList(dataStr, 64);
+        if (strList.size() != 2) {
+            return null;
+        }
+        String amountStr = TrxUtils.delZeroForNum(strList.get(1));
+
+        if (amountStr.length() > 0) {
+            amountStr = new BigInteger(amountStr, 16).toString(10);
+        }
+
+   return amountStr;
+    }
+
+    public static  String getOwnerAddress(JSONObject json){
+        String owner_address = json.getJSONObject("raw_data").getJSONArray("contract").getJSONObject(0).getJSONObject("parameter").getJSONObject("value").getString("owner_address");
+        owner_address = WalletApi.encode58Check(ByteArray.fromHexString(owner_address));
+        return owner_address;
+    }
+
+    public static  String getContractAddress(JSONObject json)
+    {
+        String contractAddress = json.getJSONObject("raw_data").getJSONArray("contract").getJSONObject(0).getJSONObject("parameter").getJSONObject("value").getString("contract_address");
+        contractAddress = WalletApi.encode58Check(ByteArray.fromHexString(contractAddress));
+        return  contractAddress;
+    }
 }
 
 
