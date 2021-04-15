@@ -51,7 +51,7 @@ public class TrcScanDataJob extends ScanDataJob {
                 JSONArray parseArray = jsonObject2.getJSONArray("transactions");
 //                String blockHash = jsonObject.getString("blockID");
                 AtomicBoolean atomicBoolean = new AtomicBoolean(false);
-                if (parseArray.size() > 0) {
+                if (parseArray != null && parseArray.size() > 0) {
                     Long finalI = i;
                     parseArray.forEach(e -> {
                         try {
