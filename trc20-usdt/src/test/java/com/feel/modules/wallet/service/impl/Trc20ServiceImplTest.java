@@ -44,7 +44,7 @@ public class Trc20ServiceImplTest {
         // "address":"TA1gLs6FS8eik5NJqjvm73L4qRqWDmLwmh",
         // "hexAddress":"410077a7caa7efe71a5e8ef1fe9ee697c8e755eff6"}
       //  System.out.println(JSONObject.toJSONString(map));
-       BigDecimal str = trc20Service.getBalance("TVYAi4N2rt6V9RovxTcaF34o6fwTwqq2Nw");
+       String str = trc20Service.getTransactionById("4016c735f7b8aad0b0a09e28e700275af9ba8753622a40a755297d96ffccf4e8");
         System.out.println(str);
     }
 

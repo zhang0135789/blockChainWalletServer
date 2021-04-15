@@ -55,7 +55,7 @@ coin:
   #
   step: 1
   #初始化扫描块高
-  init-block-height: 28836775
+  init-block-height: 29315905
   # 提现/手续费 地址
   withdraw-address: THJeEhbAd5aWSgpTs6bdixwPDvcaEbYwfp
   # 提现/手续费钱包密码
@@ -83,7 +83,7 @@ contract:
   gas-limit: 6000000
 
 rule:
-  initBlockHeight: 28836775
+  initBlockHeight: 29315900
   interval: 5000
   step: 5
   confirmation: 19

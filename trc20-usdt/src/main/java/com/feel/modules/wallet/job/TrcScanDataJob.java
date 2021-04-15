@@ -39,10 +39,7 @@ public class TrcScanDataJob extends ScanDataJob {
 
     @Override
     public List scanBlock(Long startBlockNumber, Long endBlockNumber) {
-        List<Account> accounts = accountService.findAll();
         List<Recharge> recharges = new ArrayList<>();
-        List<String> addressList = accounts.stream().map(Account::getAddress).collect(Collectors.toList());
-        if(accounts.size() > 0){
             for(Long i = startBlockNumber; i <= endBlockNumber; i ++ ){
 //                String transactionInfoByBlockNum = trc20Service.getTransactionInfoByBlockNum(BigInteger.valueOf(i));
                 String transactionInfoByBlockNum2 = trc20Service.getTransactionByBlockNum(i);
@@ -66,8 +63,8 @@ public class TrcScanDataJob extends ScanDataJob {
                             }
                             String toAddress = TrxUtils.getToAddress(json);
 
-                           String str = addressList.stream().filter(o -> o.equals(toAddress)).findFirst().orElse(null);
-                           if(StringUtils.isBlank(str)){
+                           boolean isExist = accountService.isAddressExist(toAddress);
+                           if(!isExist){
                                return;
                            }
                             Recharge recharge2 = Recharge.builder()
@@ -110,7 +107,6 @@ public class TrcScanDataJob extends ScanDataJob {
 
 
 
-        }
         return recharges;
     }
 
