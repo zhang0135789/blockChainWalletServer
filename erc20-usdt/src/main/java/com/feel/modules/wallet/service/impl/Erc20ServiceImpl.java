@@ -75,6 +75,9 @@ public class Erc20ServiceImpl implements Erc20Service {
                 .address(newAddress)
                 .walletFile(fileName)
                 .createDate(new Date())
+                .status(0)
+                .balance(BigDecimal.ZERO)
+                .gas(BigDecimal.ZERO)
                 .build();
         account = accountService.save(account);
         return account;
@@ -142,8 +145,10 @@ public class Erc20ServiceImpl implements Erc20Service {
             log.info("查询接口ERROR");
         }
 
-        log.info("erc20-usdt balance : address[{}],balance[{}]" , address , balance);
-        return new BigDecimal(balance);
+        BigDecimal amount = EthConvert.fromWei(new BigDecimal(balance), contract.getUnit());
+        log.info("erc20-usdt balance : address[{}],balance[{}]" , address , amount);
+
+        return amount;
     }
 
     /**
@@ -274,12 +279,17 @@ public class Erc20ServiceImpl implements Erc20Service {
             BigInteger nonce = ethGetTransactionCount.getTransactionCount();
             BigInteger gasPrice = getGasPrice();
             BigInteger value = EthConvert.toWei(payment.getAmount(), contract.getUnit()).toBigInteger();
-            Function fn = new Function("transfer", Arrays.asList(new Address(payment.getTo()), new Uint256(value)), Collections.<TypeReference<?>> emptyList());
+            Function fn = new Function("transfer",
+                    Arrays.asList(
+                            new Address(payment.getTo()),
+                            new Uint256(value)),
+                    Collections.<TypeReference<?>> emptyList()
+            );
             String data = FunctionEncoder.encode(fn);
             BigInteger maxGas = contract.getGasLimit();
             log.info("from = {}, value = {}, gasPrice = {}, gasLimit = {}, nonce = {}, address = {}",payment.getCredentials().getAddress(), value, gasPrice, maxGas, nonce,payment.getTo());
             RawTransaction rawTransaction = RawTransaction.createTransaction(
-                    nonce, gasPrice, maxGas, contract.getAddress(), data);
+                    nonce, gasPrice, maxGas, contract.getAddress() , data);
             byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, payment.getCredentials());
             String hexValue = Numeric.toHexString(signedMessage);
             log.info("hexRawValue={}",hexValue);
@@ -287,6 +297,7 @@ public class Erc20ServiceImpl implements Erc20Service {
             String txid = ethSendTransaction.getTransactionHash();
             log.info("txid:" + txid);
             if (StringUtils.isEmpty(txid)) {
+                log.error(ethSendTransaction.getError().getMessage());
                 throw new RuntimeException("发送交易失败");
             } else {
 //                if(ObjectUtil.isNotNull(etherApiUtils)){

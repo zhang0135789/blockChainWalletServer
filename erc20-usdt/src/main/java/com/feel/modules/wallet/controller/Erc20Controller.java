@@ -126,14 +126,14 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     @GetMapping("/collection")
     @ApiOperation("归集")
     public R check() {
-        log.info("======> 开始检查账户");
-        try {
-            AccountCollection accountCollection = new AccountCollection(accountService , 100);
-            accountCollection.runCheckAccount(accountCollectionService);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        log.info("======> 开始检查账户");
+//        try {
+//            AccountCollection accountCollection = new AccountCollection(accountService , 100);
+//            accountCollection.runCheckAccount(accountCollectionService);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         log.info("======> 开始归集");
         try {
