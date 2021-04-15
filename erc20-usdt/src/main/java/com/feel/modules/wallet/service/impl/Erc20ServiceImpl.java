@@ -211,7 +211,11 @@ public class Erc20ServiceImpl implements Erc20Service {
         }catch (CipherException e) {
             log.info("解密失败，密码不正确",e);
             throw new RuntimeException("解密失败，密码不正确");
+        } catch (Exception e) {
+            log.info("获取token余额失败");
+            throw new RuntimeException("获取token余额失败");
         }
+
 
 //        String txid = transferToken(coin.getWithdrawAddress(), to, amount, true);
         String txid = handleTransferToken(credentials, to , amount);

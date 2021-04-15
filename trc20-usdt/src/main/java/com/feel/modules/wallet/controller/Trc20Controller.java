@@ -84,7 +84,7 @@ public class Trc20Controller extends WalletController<Trc20Service>{
     @Override
     @GetMapping("/balance")
     @ApiOperation("获取地址总资产")
-    public R<BigDecimal> balance(String address) throws IOException {
+    public R<BigDecimal> balance(String address) {
         BigDecimal balance = null;
         try {
             balance = walletService.getBalance(address);
@@ -98,8 +98,14 @@ public class Trc20Controller extends WalletController<Trc20Service>{
     @Override
     @GetMapping("/transfer")
     @ApiOperation("交易")
-    public R<String> transfer(String from, String to, BigDecimal amount, BigDecimal fee) throws Throwable {
-        String txid = walletService.transfer(from,to,amount,fee);
+    public R<String> transfer(String from, String to, BigDecimal amount, BigDecimal fee) {
+        String txid = null;
+        try {
+            txid = walletService.transfer(from,to,amount,fee);
+        } catch (Exception e) {
+            log.error("转账失败" ,e);
+            return R.error("转账失败");
+        }
         return R.ok(txid);
     }
 
