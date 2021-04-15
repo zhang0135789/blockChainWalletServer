@@ -45,7 +45,7 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
     public void checkAccount(Account account) {
         try {
 //            BigDecimal minerFee = erc20Service.getMinerFee(contract.getGasLimit());
-            BigDecimal minerFee = erc20Service.getMinerFee(contract.getGasLimit());
+            BigDecimal minerFee = erc20Service.getMinerFee(coin.getGasLimit());
 
             BigDecimal ethBalance = erc20Service.getBalance(account.getAddress());
             BigDecimal tokenBalance = erc20Service.getTokenBalance(account.getAddress());
@@ -83,7 +83,7 @@ public class AccountCollectionServiceImpl implements AccountCollectionService {
     public void collectionCoin(Account account) {
         try {
             String collectionAddress = coin.getCollectionAddress();
-            BigDecimal minerFee = erc20Service.getMinerFee(contract.getGasLimit());
+            BigDecimal minerFee = erc20Service.getMinerFee(coin.getGasLimit());
             BigDecimal tokenBalance = erc20Service.getTokenBalance(account.getAddress());
             String hash = erc20Service.transferToken(account.getAddress(), collectionAddress, tokenBalance, minerFee);
 

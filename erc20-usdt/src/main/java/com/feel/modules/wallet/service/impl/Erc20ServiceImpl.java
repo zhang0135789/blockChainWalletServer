@@ -176,7 +176,7 @@ public class Erc20ServiceImpl implements Erc20Service {
     public String transferToken(String from, String to, BigDecimal amount, BigDecimal fee) throws Exception {
         log.info("transfer From Address:from={},to={},amount={},fee={}",from,to, amount, fee);
         if (fee == null || fee.compareTo(BigDecimal.ZERO) <= 0) {
-            fee = getMinerFee(contract.getGasLimit());
+            fee = getMinerFee(coin.getGasLimit());
         }
         if(getBalance(from).compareTo(fee) < 0){
             log.info("地址[{}]手续费不足，最低为[{}ETH]",from,fee);
@@ -286,7 +286,7 @@ public class Erc20ServiceImpl implements Erc20Service {
                     Collections.<TypeReference<?>> emptyList()
             );
             String data = FunctionEncoder.encode(fn);
-            BigInteger maxGas = contract.getGasLimit();
+            BigInteger maxGas = coin.getGasLimit();
             log.info("from = {}, value = {}, gasPrice = {}, gasLimit = {}, nonce = {}, address = {}",payment.getCredentials().getAddress(), value, gasPrice, maxGas, nonce,payment.getTo());
             RawTransaction rawTransaction = RawTransaction.createTransaction(
                     nonce, gasPrice, maxGas, contract.getAddress() , data);

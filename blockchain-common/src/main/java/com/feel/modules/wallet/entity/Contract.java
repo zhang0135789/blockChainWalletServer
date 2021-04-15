@@ -32,9 +32,6 @@ public class Contract {
     @ApiModelProperty(name = "address" , value = "合约地址")
     private String address;
 
-    @ApiModelProperty(name = "gasLimit" , value = "gas上限")
-    private BigInteger gasLimit;
-
     @ApiModelProperty(name = "eventTopic0" , value = "eventTopic")
     private String eventTopic0;
 
