@@ -308,7 +308,7 @@ public class Trc20ServiceImpl implements Trc20Service {
         param.put("function_selector", "transfer(address,uint256)");
         param.put("parameter", to_address + uint256);
         param.put("call_value", 0);
-        param.put("fee_limit", contract.getGasLimit());
+        param.put("fee_limit", coin.getGasLimit());
         String prvkey ="";
 
         if(from.equals(coin.getWithdrawAddress())){

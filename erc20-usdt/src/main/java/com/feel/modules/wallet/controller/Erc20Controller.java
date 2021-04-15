@@ -2,6 +2,7 @@ package com.feel.modules.wallet.controller;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.feel.modules.wallet.entity.Account;
+import com.feel.modules.wallet.entity.Coin;
 import com.feel.modules.wallet.entity.Contract;
 import com.feel.modules.wallet.service.AccountCollectionService;
 import com.feel.modules.wallet.service.AccountService;
@@ -34,8 +35,8 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     @Autowired
     private AccountService accountService;
 
-
-
+    @Autowired
+    private Coin coin;
 
     @Override
     @GetMapping("/getNewAddress")
@@ -109,7 +110,13 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     @Override
     public R withdrawTransfer(String to, BigDecimal amount, BigDecimal fee) {
         String txid = null;
+        String address = coin.getWithdrawAddress();
+
         try {
+            BigDecimal tokenBalance = walletService.getTokenBalance(address);
+            if(tokenBalance.compareTo(amount) < 0){
+                return R.error("提现账户余额不足");
+            }
             txid = walletService.withdrawTransfer(to,amount,fee);
 
         } catch (Exception e) {
@@ -126,14 +133,14 @@ public class Erc20Controller extends WalletController<Erc20Service>{
     @GetMapping("/collection")
     @ApiOperation("归集")
     public R check() {
-        log.info("======> 开始检查账户");
-        try {
-            AccountCollection accountCollection = new AccountCollection(accountService , 100);
-            accountCollection.runCheckAccount(accountCollectionService);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        log.info("======> 开始检查账户");
+//        try {
+//            AccountCollection accountCollection = new AccountCollection(accountService , 100);
+//            accountCollection.runCheckAccount(accountCollectionService);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         log.info("======> 开始归集");
         try {
