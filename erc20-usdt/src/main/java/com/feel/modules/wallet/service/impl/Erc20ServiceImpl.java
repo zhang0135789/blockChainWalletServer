@@ -142,7 +142,7 @@ public class Erc20ServiceImpl implements Erc20Service {
             }
         } catch (Throwable e) {
             e.printStackTrace();
-            log.info("查询接口ERROR");
+            log.info("查询接口ERROR",e);
         }
 
         BigDecimal amount = EthConvert.fromWei(new BigDecimal(balance), contract.getUnit());
