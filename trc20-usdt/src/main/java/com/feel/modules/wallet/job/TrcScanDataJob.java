@@ -89,6 +89,7 @@ public class TrcScanDataJob extends ScanDataJob {
                                         String blockHash = jsonObject.getString("blockID");
                                         recharge1.setBlockHash(blockHash);
                                         recharge1.setBlockHeight(finalI);
+                                        recharge1.setType(1);
                                         recharges.add(recharge1);
                                     }
 
