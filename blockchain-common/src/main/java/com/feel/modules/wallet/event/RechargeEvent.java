@@ -1,15 +1,19 @@
 package com.feel.modules.wallet.event;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.http.HttpUtil;
 import com.feel.modules.wallet.entity.Account;
 import com.feel.modules.wallet.entity.Recharge;
 import com.feel.modules.wallet.service.AccountService;
 import com.feel.modules.wallet.service.RechargeService;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: zz
@@ -41,8 +45,26 @@ public class RechargeEvent {
             accountService.updateBalance(recharge.getToAddress(),account1.getBalance().add(recharge.getAmount()));
 
             //TODO 通知业务系统充值记录
-
+            String url = "http://121.5.12.126:8000/api/usdtDeposit/bookedNotice";
+            JSONObject body = new JSONObject();
+            body.put("personCode",account1.getAccount());
+            body.put("amount",recharge.getAmount());
+            body.put("address",recharge.getToAddress());
+            body.put("type",recharge.getType());
+            HttpUtil.post(url,body.toString());
         }
 
+    }
+
+
+    public static void main(String[] args) {
+        String url = "http://121.5.12.126:8000/api/usdtDeposit/bookedNotice";
+        JSONObject body = new JSONObject();
+        body.put("personCode","123");
+        body.put("amount",123);
+        body.put("address","1234545");
+        body.put("type",1);
+        String post = HttpUtil.post(url, body.toString());
+        System.out.println(post);
     }
 }

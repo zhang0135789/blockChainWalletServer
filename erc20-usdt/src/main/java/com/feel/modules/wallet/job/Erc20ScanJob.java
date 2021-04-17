@@ -47,8 +47,6 @@ public class Erc20ScanJob extends ScanDataJob {
     private Contract contract;
     @Autowired
     private AccountService accountService;
-    @Autowired
-    private RechargeEvent rechargeEvent;
 
     @Autowired
     private EtherApiUtils etherApiUtils;
@@ -116,6 +114,7 @@ public class Erc20ScanJob extends ScanDataJob {
                                     .fromAddress(transaction.getFrom())
                                     .time(Calendar.getInstance().getTime())
                                     .blockHeight(transaction.getBlockNumber().longValue())
+                                    .type(2)
                                     .build();
                             log.info("receive {} {}",recharge.getAmount(),getCoin().getUnit());
                             rechargeList.add(recharge);

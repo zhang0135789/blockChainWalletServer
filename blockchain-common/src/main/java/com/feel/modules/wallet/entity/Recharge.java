@@ -49,4 +49,7 @@ public class Recharge implements Serializable {
 
     @ApiModelProperty(name = "status" , value = "状态 0:收到冲值 1")
     private int status = 0;
+
+    @ApiModelProperty(name = "tpye" , value = "类型 1:trc20-usdt 2.erc20-usdt")
+    private int type;
 }
