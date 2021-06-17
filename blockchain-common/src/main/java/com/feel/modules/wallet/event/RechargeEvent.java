@@ -45,13 +45,15 @@ public class RechargeEvent {
             accountService.updateBalance(recharge.getToAddress(),account1.getBalance().add(recharge.getAmount()));
 
             //TODO 通知业务系统充值记录
+            log.info("#######################充值[{}]:{}",recharge.getToAddress(),recharge.getAmount());
             String url = "http://121.5.12.126:8000/api/usdtDeposit/bookedNotice";
             JSONObject body = new JSONObject();
             body.put("personCode",account1.getAccount());
             body.put("amount",recharge.getAmount());
             body.put("address",recharge.getToAddress());
             body.put("type",recharge.getType());
-            HttpUtil.post(url,body.toString());
+            String post = HttpUtil.post(url, body.toString());
+            log.info("#######################充值结果:{}",post);
         }
 
     }
