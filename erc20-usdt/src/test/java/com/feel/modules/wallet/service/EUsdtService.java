@@ -36,6 +36,13 @@ public class EUsdtService {
     }
 
 
+    @Autowired
+    private AccountService accountService;
 
+    @Test
+    public void testExit() {
+        boolean flag = accountService.isAddressExist("0xdac17f958d2ee523a2206206994597c13d831ec7");
+        System.out.println(false);
+    }
 
 }
